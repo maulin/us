@@ -1,5 +1,7 @@
 module Galaxy
   class Map
+    GRID_COLOR = Gosu::Color.argb(255, 128, 128, 128)
+
     def initialize(width, height)
       @width = width
       @height = height
@@ -38,6 +40,18 @@ module Galaxy
       stars = []
       stars << Star.new(star_1_quad)
       stars << Star.new(star_2_quad)
+    end
+
+    def draw
+      (@width / QUAD_LENGTH).times do |i|
+        x = i * QUAD_LENGTH
+        G.draw_line(x, 0, GRID_COLOR, x, @height, GRID_COLOR)
+      end
+
+      (@height / QUAD_LENGTH).times do |i|
+        y = i * QUAD_LENGTH
+        G.draw_line(0, y, GRID_COLOR, @width, y, GRID_COLOR)
+      end
     end
   end
 end
