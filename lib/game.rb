@@ -1,15 +1,17 @@
+require_relative './map'
+
 class Game
+  extend Forwardable
+
   attr_accessor :state
 
+  def_delegators :@map, :move_objects
+
   def initialize(window)
-    @galaxy = Galaxy::Base.new(window.width, window.height)
-    @map = @galaxy.map
-    @state = :unstarted
+    @map = Map.new(window.width, window.height)
   end
 
   def draw
     @map.draw
-    @galaxy.draw
-    @state = :started
   end
 end
