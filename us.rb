@@ -5,8 +5,8 @@ require 'bundler/setup'
 require 'gosu'
 
 require_relative './lib/g'
-require_relative './lib/galaxy'
 require_relative './lib/game'
+require_relative './lib/clock'
 
 class GameWindow < Gosu::Window
   WIDTH = 2560
@@ -17,17 +17,27 @@ class GameWindow < Gosu::Window
     self.caption = "Uranus's Shame"
     @game = Game.new(self)
     @grid_initialized = false
+    @clock = Clock.new
   end
 
   def needs_cursor?
     true
   end
 
-  def needs_redraw?
-    @game.state == :unstarted
+  def button_up(id)
+    case id
+    when Gosu::MS_LEFT
+    end
+  end
+
+  def update
+    if @clock.tick?
+      @game.move_objects
+    end
   end
 
   def draw
+    @clock.draw
     @game.draw
   end
 end
