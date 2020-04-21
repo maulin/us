@@ -7,10 +7,11 @@ require 'gosu'
 require_relative './lib/g'
 require_relative './lib/game'
 require_relative './lib/clock'
+require_relative './lib/camera'
 
 class GameWindow < Gosu::Window
-  WIDTH = 2560
-  HEIGHT = 1440
+  WIDTH = 800
+  HEIGHT = 600
 
   def initialize
     super(WIDTH, HEIGHT)
@@ -19,27 +20,27 @@ class GameWindow < Gosu::Window
     @game = Game.new(self)
     @grid_initialized = false
     @clock = Clock.new
+    @camera = Camera.new(WIDTH, HEIGHT)
   end
 
   def needs_cursor?
     true
   end
 
-  def button_up(id)
-    case id
-    when Gosu::MS_LEFT
-    end
-  end
-
   def update
+    @camera.move_left if button_down?(Gosu::KbA)
+    @camera.move_right if button_down?(Gosu::KbD)
+
     if @clock.tick?
       @game.move_objects
     end
   end
 
   def draw
-    @clock.draw
-    @game.draw
+    translate(-@camera.nw.x, -@camera.nw.y) do
+      # @clock.draw
+      @game.draw(@camera)
+    end
   end
 end
 

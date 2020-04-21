@@ -11,7 +11,7 @@ class Game
     @map = Map.new(window.width, window.height)
   end
 
-  def draw
-    @map.draw
+  def draw(camera)
+    @map.draw(camera)
   end
 end

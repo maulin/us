@@ -9,8 +9,8 @@ class Map
   GRID_COLOR = Gosu::Color.argb(255, 128, 128, 128)
 
   def initialize(width, height)
-    @width = width
-    @height = height
+    @width = 1024
+    @height = 768
 
     # generate_grid
     # @stars = initialize_stars
@@ -84,17 +84,31 @@ class Map
   end
 
   def gen_grid
-    @grid = {}
-    (0..@width).step(LY) do |x|
-      @grid[x] = {}
-      (0..@height).step(LY) do |y|
-        image = Gosu::Image.from_text(G.window, "#{x}:#{y}", Gosu.default_font_name, 15)
-        @grid[x][y] = image
-      end
-    end
+    # @grid = {}
+    # (0..@width).step(50) do |x|
+      # @grid[x] = {}
+      # (0..@height).step(50) do |y|
+        # image = Gosu::Image.from_text(G.window, "#{x}:#{y}", Gosu.default_font_name, 12)
+        # @grid[x][y] = image
+      # end
+    # end
   end
 
-  def draw
+  def draw_g(camera)
+    i1 = Gosu::Image.from_text(G.window, "***This is image one***", Gosu.default_font_name, 15)
+    i2 = Gosu::Image.from_text(G.window, "***This is image two ***", Gosu.default_font_name, 15)
+
+    i1.draw(-20, 100, 0) if camera.can_view?(-20, 100, i1)
+    i2.draw(700, 500, 0) if camera.can_view?(700, 500, i2)
+    # @grid.each do |x, row|
+      # row.each do |y, val|
+        # val.draw(x, y, 0) if camera.can_view?(x, y, val)
+      # end
+    # end
+  end
+
+  def draw(camera)
+    draw_g(camera)
     # draw_grid
     # draw_stars
     # draw_carriers
