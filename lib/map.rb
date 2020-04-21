@@ -12,9 +12,10 @@ class Map
     @width = width
     @height = height
 
-    generate_grid
-    @stars = initialize_stars
-    build_carrier
+    # generate_grid
+    # @stars = initialize_stars
+    # build_carrier
+    gen_grid
   end
 
   def generate_grid
@@ -57,7 +58,7 @@ class Map
   end
   
   def move_objects
-    @carrier.move
+    # @carrier.move
   end
 
   def draw_stars
@@ -82,9 +83,20 @@ class Map
     end
   end
 
+  def gen_grid
+    @grid = {}
+    (0..@width).step(LY) do |x|
+      @grid[x] = {}
+      (0..@height).step(LY) do |y|
+        image = Gosu::Image.from_text(G.window, "#{x}:#{y}", Gosu.default_font_name, 15)
+        @grid[x][y] = image
+      end
+    end
+  end
+
   def draw
-    draw_grid
-    draw_stars
-    draw_carriers
+    # draw_grid
+    # draw_stars
+    # draw_carriers
   end
 end

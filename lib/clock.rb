@@ -7,7 +7,7 @@ class Clock
   end
 
   def draw
-    time = "#{Time.now.strftime("%I:%M:%S %p")} - Tick: #{@tick}"
+    time = "#{Time.now.strftime("%I:%M:%S %p")} - Tick: #{@tick} - FPS: #{Gosu.fps}"
     G.draw_text(time, 10, 10)
   end
 

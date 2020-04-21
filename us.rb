@@ -15,6 +15,7 @@ class GameWindow < Gosu::Window
   def initialize
     super(WIDTH, HEIGHT)
     self.caption = "Uranus's Shame"
+
     @game = Game.new(self)
     @grid_initialized = false
     @clock = Clock.new
