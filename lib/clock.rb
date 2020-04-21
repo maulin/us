@@ -12,7 +12,7 @@ class Clock
   end
 
   def current_time
-    Time.now.to_i
+    Time.now.to_f
   end
 
   def tick?

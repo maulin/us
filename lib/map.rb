@@ -53,7 +53,7 @@ class Map
   def build_carrier
     quad = @grid[20][100]
     @carrier = Carrier.new(quad)
-    @carrier.travel(@stars.sample.center)
+    @carrier.travel(@stars.sample.quad)
   end
   
   def move_objects
@@ -62,12 +62,7 @@ class Map
 
   def draw_stars
     @stars.each do |s|
-      G.draw_quad(
-        s.nw.x, s.nw.y, Gosu::Color::BLUE,
-        s.ne.x, s.ne.y, Gosu::Color::BLUE,
-        s.sw.x, s.sw.y, Gosu::Color::BLUE,
-        s.se.x, s.se.y, Gosu::Color::BLUE
-      )
+      G.draw_quad(s.nw, s.ne, s.sw, s.se, :blue)
     end
   end
 
@@ -78,12 +73,12 @@ class Map
   def draw_grid
     (@width / LY).times do |i|
       x = i * LY
-      G.draw_line(x, 0, GRID_COLOR, x, @height, GRID_COLOR)
+      G.draw_line(Point.new(x, 0), Point.new(x, @height), :white)
     end
 
     (@height / LY).times do |i|
       y = i * LY
-      G.draw_line(0, y, GRID_COLOR, @width, y, GRID_COLOR)
+      G.draw_line(Point.new(0, y), Point.new(@width, y), :white)
     end
   end
 
