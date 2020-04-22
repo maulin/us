@@ -28,12 +28,9 @@ class GameWindow < Gosu::Window
   end
 
   def update
+    @clock.tick?
     @camera.move_left if button_down?(Gosu::KbA)
     @camera.move_right if button_down?(Gosu::KbD)
-
-    if @clock.tick?
-      @game.move_objects
-    end
   end
 
   def draw
