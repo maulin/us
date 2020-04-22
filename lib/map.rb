@@ -11,40 +11,52 @@ class Map
   def initialize(width, height)
     @width = width
     @height = height
+    @stars = []
 
-    @stars = init_stars
+    init_stars
   end
 
   def init_stars
     stars = []
 
-    colors = [:red, :yellow, :green, :blue, :fuchsia, :white]
-
-    Game::START_STARS.times do
-      color = colors.pop
-
+    Game::START_STARS.times do |i|
       if stars.empty?
         x = rand(Star::SIZE..(@width - Star::SIZE))
         y = rand(Star::SIZE..(@height - Star::SIZE))
-        star = Star.new(Point.new(x, y), color)
-        pp "initial star: #{star}"
+        star = Star.new(Point.new(x, y), :blue)
+
         stars << star
+        @stars << star
       else
         star = stars.sample
+        new_star_location = star_location_near(star)
 
-        distance = rand(Game::STAR_MIN_DISTANCE..Game::START_STARS_MAX_DISTANCE)
-        angle = rand(0..360)
-        x = star.center.x + (distance * Math.sin(Math::PI/180 * angle))
-        y = star.center.y - (distance * Math.cos(Math::PI/180 * angle))
-        new_star = Star.new(Point.new(x, y), color)
+        until star_location_valid?(new_star_location) do
+          new_star_location = star_location_near(star)
+        end
 
-        pp "start star: #{star}, new star: #{new_star}, angle: #{angle}, distance: #{distance}"
+        new_star = Star.new(new_star_location, :blue)
 
         stars << new_star
+        @stars << new_star
       end
     end
+  end
 
-    stars
+  def star_location_near(star)
+    distance = rand((Star::SIZE * 2)..Game::START_STARS_MAX_DISTANCE)
+    angle = rand(0..360)
+    x = star.center.x + (distance * Math.sin(Math::PI/180 * angle))
+    y = star.center.y - (distance * Math.cos(Math::PI/180 * angle))
+
+    Point.new(x, y)
+  end
+
+  def star_location_valid?(location)
+    @stars.all? do |s|
+      magnitude = Vector.new(s.center, location).magnitude
+      magnitude > Star::SIZE * 2
+    end
   end
 
   def draw_stars

@@ -1,13 +1,7 @@
 module G
   COLORS = {
-    :aqua => Gosu::Color::AQUA,
     :blue => Gosu::Color::BLUE,
-    :cyan => Gosu::Color::CYAN,
-    :fuchsia => Gosu::Color::FUCHSIA,
-    :green => Gosu::Color::GREEN,
-    :red => Gosu::Color::RED,
     :white => Gosu::Color::WHITE,
-    :yellow => Gosu::Color::YELLOW
   }
 
   class << self
@@ -32,8 +26,8 @@ module G
     )
   end
 
-  def self.draw_text(msg, x, y, z = 0)
-    text = Gosu::Image.from_text(window, msg, Gosu.default_font_name, 30)
+  def self.draw_text(msg:, x:, y:, z: 0, size:)
+    text = Gosu::Image.from_text(window, msg, Gosu.default_font_name, size)
     text.draw(x, y, z)
   end
 
