@@ -93,4 +93,5 @@ class Map
     # draw_grid
     # draw_stars
     # draw_carriers
+  end
 end
