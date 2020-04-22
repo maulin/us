@@ -1,7 +1,13 @@
 module G
   COLORS = {
+    :aqua => Gosu::Color::AQUA,
+    :blue => Gosu::Color::BLUE,
+    :cyan => Gosu::Color::CYAN,
+    :fuchsia => Gosu::Color::FUCHSIA,
+    :green => Gosu::Color::GREEN,
+    :red => Gosu::Color::RED,
     :white => Gosu::Color::WHITE,
-    :blue => Gosu::Color::BLUE
+    :yellow => Gosu::Color::YELLOW
   }
 
   class << self

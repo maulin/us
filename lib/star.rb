@@ -1,11 +1,23 @@
 class Star
-  extend Forwardable
+  SIZE = 3
 
-  attr_accessor :quad
+  attr_reader :center
 
-  def_delegators :@quad, :nw, :ne, :se, :sw, :center
+  def initialize(center, color)
+    @center = center
+    @color = color
+  end
 
-  def initialize(quad)
-    @quad = quad
+  def draw
+    nw = Point.new(@center.x - SIZE, @center.y - SIZE)
+    sw = Point.new(@center.x - SIZE, @center.y + SIZE)
+    ne = Point.new(@center.x + SIZE, @center.y - SIZE)
+    se = Point.new(@center.x + SIZE, @center.y + SIZE)
+
+    G.draw_quad(nw, ne, sw, se, @color)
+  end
+
+  def to_s
+    "#{@color} - #{center}"
   end
 end
