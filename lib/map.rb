@@ -11,80 +11,59 @@ class Map
   def initialize(width, height)
     @width = width
     @height = height
+    @stars = []
 
-    generate_grid
-    @stars = initialize_stars
-    build_carrier
+    init_stars
   end
 
-  def generate_grid
-    @grid = []
-    rows = @height / LY
-    cols = @width / LY
+  def init_stars
+    stars = []
 
-    rows.times do |i|
-      @grid << []
-      y = i * LY
+    Game::START_STARS.times do |i|
+      if stars.empty?
+        x = rand(Star::SIZE..(@width - Star::SIZE))
+        y = rand(Star::SIZE..(@height - Star::SIZE))
+        star = Star.new(Point.new(x, y), :blue)
 
-      cols.times do |j|
-        x = j * LY
+        stars << star
+        @stars << star
+      else
+        star = stars.sample
+        new_star_location = star_location_near(star)
 
-        nw = Point.new(x, y)
-        ne = Point.new(x + LY, y)
-        se = Point.new(x + LY, y + LY)
-        sw = Point.new(x, y + LY)
-        center = Point.new(x + HLY, y + HLY)
+        until star_location_valid?(new_star_location) do
+          new_star_location = star_location_near(star)
+        end
 
-        quad = Quad.new(nw, ne, se, sw, center)
-        @grid[i] << quad
+        new_star = Star.new(new_star_location, :blue)
+
+        stars << new_star
+        @stars << new_star
       end
     end
   end
 
-  def initialize_stars
-    star_1_quad = @grid[40][50]
-    star_2_quad = @grid[40][100]
+  def star_location_near(star)
+    distance = rand((Star::SIZE * 2)..Game::START_STARS_MAX_DISTANCE)
+    angle = rand(0..360)
+    x = star.center.x + (distance * Math.sin(Math::PI/180 * angle))
+    y = star.center.y - (distance * Math.cos(Math::PI/180 * angle))
 
-    stars = []
-    stars << Star.new(star_1_quad)
-    stars << Star.new(star_2_quad)
+    Point.new(x, y)
   end
 
-  def build_carrier
-    quad = @grid[20][100]
-    @carrier = Carrier.new(quad)
-    @carrier.travel(@stars.sample.quad)
-  end
-  
-  def move_objects
-    @carrier.move
+  def star_location_valid?(location)
+    @stars.all? do |s|
+      magnitude = Vector.new(s.center, location).magnitude
+      magnitude > Star::SIZE * 2
+    end
   end
 
   def draw_stars
-    @stars.each do |s|
-      G.draw_quad(s.nw, s.ne, s.sw, s.se, :blue)
-    end
-  end
-
-  def draw_carriers
-    @carrier.draw
-  end
-
-  def draw_grid
-    (@width / LY).times do |i|
-      x = i * LY
-      G.draw_line(Point.new(x, 0), Point.new(x, @height), :white)
-    end
-
-    (@height / LY).times do |i|
-      y = i * LY
-      G.draw_line(Point.new(0, y), Point.new(@width, y), :white)
-    end
+    @stars.each(&:draw)
   end
 
   def draw
-    draw_grid
     draw_stars
-    draw_carriers
   end
 end
