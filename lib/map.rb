@@ -51,10 +51,6 @@ class Map
     @stars.each(&:draw)
   end
 
-  def draw_carriers
-    @carrier.draw
-  end
-
   def draw
     draw_stars
   end

@@ -31,9 +31,7 @@ class GameWindow < Gosu::Window
   end
 
   def update
-    if @clock.tick?
-      @game.move_objects
-    end
+    @clock.tick?
   end
 
   def draw
