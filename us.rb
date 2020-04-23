@@ -10,8 +10,8 @@ require_relative './lib/clock'
 require_relative './lib/camera'
 
 class GameWindow < Gosu::Window
-  WIDTH = 800
-  HEIGHT = 600
+  WIDTH = 1024
+  HEIGHT = 768
 
   def initialize
     super(WIDTH, HEIGHT)
@@ -27,16 +27,31 @@ class GameWindow < Gosu::Window
     true
   end
 
+  def button_down(id)
+    case id
+    when Gosu::MsWheelDown
+      @camera.zoom_in
+    when Gosu::MsWheelUp
+      @camera.zoom_out
+    when Gosu::KbSpace
+      @camera.reset
+    end
+  end
+
   def update
     @clock.tick?
     @camera.move_left if button_down?(Gosu::KbA)
     @camera.move_right if button_down?(Gosu::KbD)
+    @camera.move_up if button_down?(Gosu::KbW)
+    @camera.move_down if button_down?(Gosu::KbS)
   end
 
   def draw
-    translate(-@camera.nw.x, -@camera.nw.y) do
-      # @clock.draw
-      @game.draw(@camera)
+    @clock.draw
+    translate(-@camera.pos.x, -@camera.pos.y) do
+      scale(@camera.zoom, @camera.zoom, @camera.pos.x, @camera.pos.y) do
+        @game.draw(@camera)
+      end
     end
   end
 end
