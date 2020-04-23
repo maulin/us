@@ -4,13 +4,12 @@ require_relative './star'
 require_relative './carrier'
 
 class Map
-  LY = 20
-  HLY = 10
-  GRID_COLOR = Gosu::Color.argb(255, 128, 128, 128)
+  WIDTH = 2560
+  HEIGHT = 1440
 
-  def initialize(width, height)
-    @width = width
-    @height = height
+  def initialize
+    @width = WIDTH
+    @height = HEIGHT
     @stars = []
 
     init_stars
@@ -46,24 +45,26 @@ class Map
   def star_location_near(star)
     distance = rand((Star::SIZE * 2)..Game::START_STARS_MAX_DISTANCE)
     angle = rand(0..360)
-    x = star.center.x + (distance * Math.sin(Math::PI/180 * angle))
-    y = star.center.y - (distance * Math.cos(Math::PI/180 * angle))
+    x = star.pos.x + (distance * Math.sin(Math::PI/180 * angle))
+    y = star.pos.y - (distance * Math.cos(Math::PI/180 * angle))
 
     Point.new(x, y)
   end
 
   def star_location_valid?(location)
     @stars.all? do |s|
-      magnitude = Vector.new(s.center, location).magnitude
-      magnitude > Star::SIZE * 2
+      magnitude = Vector.new(s.pos, location).magnitude
+      magnitude > s.width
     end
   end
 
-  def draw_stars
-    @stars.each(&:draw)
+  def draw_stars(camera)
+    @stars.each do |s|
+      s.draw if camera.can_view?(s)
+    end
   end
 
-  def draw
-    draw_stars
+  def draw(camera)
+    draw_stars(camera)
   end
 end
