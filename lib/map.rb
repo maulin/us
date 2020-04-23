@@ -4,13 +4,12 @@ require_relative './star'
 require_relative './carrier'
 
 class Map
-  LY = 20
-  HLY = 10
-  GRID_COLOR = Gosu::Color.argb(255, 128, 128, 128)
+  WIDTH = 2560
+  HEIGHT = 1440
 
-  def initialize(width, height)
-    @width = 1024
-    @height = 768
+  def initialize
+    @width = WIDTH
+    @height = HEIGHT
     @stars = []
 
     init_stars

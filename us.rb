@@ -10,14 +10,14 @@ require_relative './lib/clock'
 require_relative './lib/camera'
 
 class GameWindow < Gosu::Window
-  WIDTH = 1024
-  HEIGHT = 768
+  WIDTH = 2560
+  HEIGHT = 1440
 
   def initialize
     super(WIDTH, HEIGHT)
     self.caption = "Uranus's Shame"
 
-    @game = Game.new(self)
+    @game = Game.new
     @grid_initialized = false
     @clock = Clock.new
     @camera = Camera.new(WIDTH, HEIGHT)
