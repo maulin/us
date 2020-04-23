@@ -1,8 +1,8 @@
-Quad = Struct.new(:nw, :ne, :se, :sw, :center) do
+Quad = Struct.new(:p1, :p2, :p3, :p4) do
   def contains?(point)
-    nw.x < point.x &&
-      se.x > point.x &&
-      nw.y < point.y &&
-      se.y > point.y
+    p1.x < point.x &&
+      p4.x > point.x &&
+      p1.y < point.y &&
+      p4.y > point.y
   end
 end

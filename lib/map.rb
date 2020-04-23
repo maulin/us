@@ -13,6 +13,7 @@ class Map
     @stars = []
 
     init_stars
+    @stars.each { |s| puts s }
   end
 
   def init_stars
@@ -22,7 +23,7 @@ class Map
       if stars.empty?
         x = rand(Star::SIZE..(@width - Star::SIZE))
         y = rand(Star::SIZE..(@height - Star::SIZE))
-        star = Star.new(Point.new(x, y), :blue)
+        star = Star.new(pos: Point.new(x, y), color: :blue, name: i)
 
         stars << star
         @stars << star
@@ -34,7 +35,7 @@ class Map
           new_star_location = star_location_near(star)
         end
 
-        new_star = Star.new(new_star_location, :blue)
+        new_star = Star.new(pos: new_star_location, color: :blue, name: i)
 
         stars << new_star
         @stars << new_star
@@ -66,5 +67,13 @@ class Map
 
   def draw(camera)
     draw_stars(camera)
+  end
+
+  def object_clicked_at(pos)
+    star = @stars.find do |s|
+      magnitude = Vector.new(s.pos, pos).magnitude
+      magnitude < Star::SIZE
+    end
+    star
   end
 end

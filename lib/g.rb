@@ -2,19 +2,21 @@ module G
   COLORS = {
     :blue => Gosu::Color::BLUE,
     :white => Gosu::Color::WHITE,
+    :gray => Gosu::Color::GRAY,
   }
 
   class << self
     attr_accessor :window
   end
 
-  def self.draw_quad(p1, p2, p3, p4, color)
+  def self.draw_quad(p1:, p2:, p3:, p4:, color:, z: 0)
     color = COLORS[color]
     window.draw_quad(
       p1.x, p1.y, color,
       p2.x, p2.y, color,
       p3.x, p3.y, color,
-      p4.x, p4.y, color
+      p4.x, p4.y, color,
+      z
     )
   end
 
