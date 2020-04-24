@@ -1,38 +1,41 @@
 module Menu
   class Base
+    attr_reader :obj
+
     def initialize(obj, kaller)
-      @object = obj
-      @caller = kaller
+      @obj = obj
+      @quad = Quad.new(
+        Point.new(0, 0), Point.new(Menu::WIDTH, 0),
+        Point.new(0, Menu::HEIGHT), Point.new(Menu::WIDTH, Menu::HEIGHT)
+      )
+      @items = [
+        Item::Header.new(
+          "#{obj.class}:#{obj.name}",
+          -> { kaller.close_menu }
+        )
+      ]
+    end
+
+    def clicked?(pos)
+      @quad.contains?(pos)
     end
 
     def draw
       draw_background
-      draw_header
+      @items.each(&:draw)
     end
     
     def draw_background
-      p1 = Point.new(0, 0)
-      p2 = Point.new(Menu::WIDTH, 0)
-      p3 = Point.new(0, Menu::HEIGHT)
-      p4 = Point.new(Menu::WIDTH, Menu::HEIGHT)
-
-      G.draw_quad(p1: p1, p2: p2, p3: p3, p4: p4, color: :gray, z: 10)
-    end
-
-    def draw_header
-      G.draw_text(msg: "X", x: 370, y: 10, z: 10, size: 30)
+      G.draw_quad(
+        p1: @quad.p1, p2: @quad.p2, p3: @quad.p3, p4: @quad.p4,
+        color: :gray, z: 10
+      )
     end
 
     def handle_click(pos)
-      pp pos
-      close_button = Quad.new(
-        Point.new(370, 10),
-        Point.new(385, 10),
-        Point.new(370, 30),
-        Point.new(385, 30),
-      )
-
-      @caller.close_menu if close_button.contains?(pos)
+      @items.each do |i|
+        i.handle_click(pos)
+      end
     end
   end
 end

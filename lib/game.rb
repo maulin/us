@@ -22,20 +22,22 @@ class Game
   end
 
   def handle_click(x, y)
-    if @menu
-      pos = Point.new(x, y)
+    pos = Point.new(x, y)
+    pp pos
+
+    if @menu && @menu.clicked?(pos)
       @menu.handle_click(pos)
     else
-      translated_x = x + @camera.pos.x
-      translated_y = y + @camera.pos.y
+      close_menu
+      pos.x += @camera.pos.x
+      pos.y += @camera.pos.y
 
-      pos = Point.new(translated_x, translated_y)
       object = @map.object_clicked_at(pos)
       @menu = Menu.create_for(object, self) if object
     end
   end
 
   def close_menu
-    @menu = nil
+    @menu = nil if @menu
   end
 end

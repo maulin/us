@@ -1,5 +1,6 @@
 require_relative './menu/base'
 require_relative './menu/star'
+require_relative './menu/items/header'
 
 module Menu
   HEIGHT = 1440

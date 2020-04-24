@@ -1,7 +1,7 @@
 class Star
-  SIZE = 4
+  SIZE = 6
 
-  attr_reader :pos
+  attr_reader :pos, :name
 
   def initialize(pos:, color:, name:)
     @pos = pos
