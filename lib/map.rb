@@ -1,5 +1,4 @@
 require_relative './point'
-require_relative './quad'
 require_relative './star'
 require_relative './carrier'
 

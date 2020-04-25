@@ -9,9 +9,13 @@ module Menu
         Point.new(0, Menu::HEIGHT), Point.new(Menu::WIDTH, Menu::HEIGHT)
       )
       @items = [
-        Item::Header.new(
-          "#{obj.class}:#{obj.name}",
-          -> { kaller.close_menu }
+        Item::Action.new(
+          text: "#{obj.class}:#{obj.name}",
+          text_size: :medium,
+          action_text: "X",
+          action_text_size: :medium,
+          callback: -> { kaller.close_menu },
+          y_pos: 10
         )
       ]
     end
@@ -26,10 +30,7 @@ module Menu
     end
     
     def draw_background
-      G.draw_quad(
-        p1: @quad.p1, p2: @quad.p2, p3: @quad.p3, p4: @quad.p4,
-        color: :gray, z: 10
-      )
+      G.draw_quad(quad: @quad, color: :gray, z: 10)
     end
 
     def handle_click(pos)

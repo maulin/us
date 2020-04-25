@@ -1,3 +1,5 @@
+require_relative './quad'
+
 class Star
   SIZE = 6
 
@@ -10,12 +12,14 @@ class Star
   end
 
   def draw
-    p1 = Point.new(pos.x - SIZE, pos.y - SIZE)
-    p2 = Point.new(pos.x + SIZE, pos.y - SIZE)
-    p3 = Point.new(pos.x - SIZE, pos.y + SIZE)
-    p4 = Point.new(pos.x + SIZE, pos.y + SIZE)
+    quad = Quad.new(
+      Point.new(pos.x - SIZE, pos.y - SIZE),
+      Point.new(pos.x + SIZE, pos.y - SIZE),
+      Point.new(pos.x - SIZE, pos.y + SIZE),
+      Point.new(pos.x + SIZE, pos.y + SIZE)
+    )
 
-    G.draw_quad(p1: p1, p2: p2, p3: p3, p4: p4, color: @color)
+    G.draw_quad(quad: quad, color: @color)
   end
 
   def to_s
@@ -28,5 +32,9 @@ class Star
 
   def height
     SIZE * 2
+  end
+
+  def buy_carrier
+    puts "buying carrier @ #{self}"
   end
 end

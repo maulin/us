@@ -18,7 +18,7 @@ class GameWindow < Gosu::Window
     self.caption = "Uranus's Shame"
 
     @grid_initialized = false
-    @clock = Clock.new
+    @clock = Clock.new(self)
     @camera = Camera.new(WIDTH, HEIGHT)
     @game = Game.new(@camera)
   end
@@ -41,7 +41,7 @@ class GameWindow < Gosu::Window
   end
 
   def update
-    pp "MOUSE: #{mouse_x} #{mouse_y}"
+    # pp "MOUSE: #{mouse_x} #{mouse_y}"
     @clock.tick?
 
     @camera.move_left if button_down?(Gosu::KbA)
@@ -58,5 +58,4 @@ end
 
 game_window = GameWindow.new
 G.window = game_window
-G.init_fonts
 game_window.show
