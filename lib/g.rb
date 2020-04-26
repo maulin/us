@@ -32,14 +32,25 @@ module G
     )
   end
 
-  def self.draw_text(msg:, pos:, z: 0, size:, color: :white, options: {})
+  def self.image_from_text(text:, size:, options: {})
     size = FONT_SIZES[size]
-    color = COLORS[color]
     { font: 'Fira Mono' }.merge(options)
 
-    image = Gosu::Image.from_text(msg, size, options)
-    image.draw(pos.x, pos.y, z, 1, 1, color)
+    Gosu::Image.from_text(text, size, options)
   end
+
+  def self.draw_img(img:, pos:, z: 0, color: :white)
+    color = COLORS[color]
+
+    img.draw(pos.x, pos.y, z, 1, 1, color)
+  end
+
+  def self.draw_text(text:, pos:, z:, size:, color: :white)
+    color = COLORS[color]
+    font = Gosu::Font.new(window, 'Fira Mono', FONT_SIZES[size])
+    font.draw_text(text, pos.x, pos.y, z, 1, 1, color)
+  end
+
 
   def self.text_width(text:, size:)
     font = Gosu::Font.new(window, 'Fira Mono', FONT_SIZES[size])

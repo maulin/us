@@ -9,7 +9,7 @@ class Clock
 
   def draw
     time = "#{Time.now.strftime("%I:%M:%S %p")} - Tick: #{@tick}"
-    G.draw_text(msg: time, pos: @clock_pos, z: 100, size: :medium)
+    G.draw_text(text: time, pos: @clock_pos, z: 100, size: :medium)
   end
 
   def current_time
