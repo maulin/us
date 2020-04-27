@@ -10,9 +10,9 @@ class Map
     @width = WIDTH
     @height = HEIGHT
     @stars = []
+    @carriers = []
 
     init_stars
-    @stars.each { |s| puts s }
   end
 
   def init_stars
@@ -58,14 +58,17 @@ class Map
     end
   end
 
-  def draw_stars(camera)
-    @stars.each do |s|
-      s.draw if camera.can_view?(s)
-    end
+  def draw_stars
+    @stars.each(&:draw)
+  end
+
+  def draw_carriers
+    @carriers.each(&:draw)
   end
 
   def draw(camera)
-    draw_stars(camera)
+    draw_stars
+    draw_carriers
   end
 
   def object_clicked_at(pos)
@@ -74,5 +77,10 @@ class Map
       magnitude < Star::SIZE
     end
     star
+  end
+
+  def create_carrier_at(star)
+    name = "#{star.name} - #{@carriers.count + 1}"
+    @carriers << Carrier.new(name, star.pos)
   end
 end

@@ -4,6 +4,7 @@ module Menu
 
     def initialize(obj, kaller)
       @obj = obj
+      @kaller = kaller
       @quad = Quad.new(
         Point.new(0, 0), Point.new(Menu::WIDTH, 0),
         Point.new(0, Menu::HEIGHT), Point.new(Menu::WIDTH, Menu::HEIGHT)

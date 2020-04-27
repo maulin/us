@@ -41,7 +41,6 @@ module Menu
       end
 
       def handle_click(pos)
-        puts "calling handle click"
         @callback.call if action_quad.contains?(pos)
       end
     end

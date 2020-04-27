@@ -1,4 +1,5 @@
 require_relative './quad'
+require_relative './carrier'
 
 class Star
   SIZE = 6
@@ -9,17 +10,17 @@ class Star
     @pos = pos
     @color = color
     @name = name
-  end
 
-  def draw
-    quad = Quad.new(
+    @quad = Quad.new(
       Point.new(pos.x - SIZE, pos.y - SIZE),
       Point.new(pos.x + SIZE, pos.y - SIZE),
       Point.new(pos.x - SIZE, pos.y + SIZE),
       Point.new(pos.x + SIZE, pos.y + SIZE)
     )
+  end
 
-    G.draw_quad(quad: quad, color: @color)
+  def draw
+    G.draw_quad(quad: @quad, color: @color)
   end
 
   def to_s
@@ -32,9 +33,5 @@ class Star
 
   def height
     SIZE * 2
-  end
-
-  def buy_carrier
-    puts "buying carrier @ #{self}"
   end
 end

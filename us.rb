@@ -41,7 +41,6 @@ class GameWindow < Gosu::Window
   end
 
   def update
-    # pp "MOUSE: #{mouse_x} #{mouse_y}"
     @clock.tick?
 
     @camera.move_left if button_down?(Gosu::KbA)

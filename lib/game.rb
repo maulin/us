@@ -23,7 +23,6 @@ class Game
 
   def handle_click(x, y)
     pos = Point.new(x, y)
-    pp pos
 
     if @menu && @menu.clicked?(pos)
       @menu.handle_click(pos)
@@ -35,6 +34,10 @@ class Game
       object = @map.object_clicked_at(pos)
       @menu = Menu.create_for(object, self) if object
     end
+  end
+
+  def buy_carrier(star)
+    @map.create_carrier_at(star)
   end
 
   def close_menu
