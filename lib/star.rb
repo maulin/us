@@ -1,5 +1,4 @@
 require_relative './quad'
-require_relative './carrier'
 
 class Star
   SIZE = 6

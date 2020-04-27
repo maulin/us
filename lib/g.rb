@@ -12,7 +12,7 @@ module G
   }
 
   class << self
-    attr_accessor :window, :fonts
+    attr_accessor :window
   end
 
   def self.draw_quad(quad:, color:, z: 0)
@@ -50,7 +50,6 @@ module G
     font = Gosu::Font.new(window, 'Fira Mono', FONT_SIZES[size])
     font.draw_text(text, pos.x, pos.y, z, 1, 1, color)
   end
-
 
   def self.text_width(text:, size:)
     font = Gosu::Font.new(window, 'Fira Mono', FONT_SIZES[size])

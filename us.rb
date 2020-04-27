@@ -51,7 +51,7 @@ class GameWindow < Gosu::Window
 
   def draw
     @clock.draw
-    @game.draw(@camera)
+    @game.draw
   end
 end
 
