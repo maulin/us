@@ -16,7 +16,7 @@ class Game
     @menu.draw if @menu
     G.window.translate(-camera.pos.x, -camera.pos.y) do
       G.window.scale(camera.zoom, camera.zoom, camera.pos.x, camera.pos.y) do
-        @map.draw(camera)
+        @map.draw
       end
     end
   end

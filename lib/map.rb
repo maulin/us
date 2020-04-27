@@ -66,7 +66,7 @@ class Map
     @carriers.each(&:draw)
   end
 
-  def draw(camera)
+  def draw
     draw_stars
     draw_carriers
   end
