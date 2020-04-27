@@ -1,14 +1,15 @@
 class Clock
   TICK_INTERVAL = 5
 
-  def initialize
+  def initialize(window)
     @start_time = @last_tick_time = current_time
     @tick = 0
+    @clock_pos = Point.new(window.width / 2, 10)
   end
 
   def draw
     time = "#{Time.now.strftime("%I:%M:%S %p")} - Tick: #{@tick}"
-    G.draw_text(msg: time, x: 10, y: 10, z: 10, size: 30)
+    G.draw_text(text: time, pos: @clock_pos, z: 100, size: :medium)
   end
 
   def current_time

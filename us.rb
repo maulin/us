@@ -17,10 +17,10 @@ class GameWindow < Gosu::Window
     super(WIDTH, HEIGHT)
     self.caption = "Uranus's Shame"
 
-    @game = Game.new
     @grid_initialized = false
-    @clock = Clock.new
+    @clock = Clock.new(self)
     @camera = Camera.new(WIDTH, HEIGHT)
+    @game = Game.new(@camera)
   end
 
   def needs_cursor?
@@ -35,11 +35,14 @@ class GameWindow < Gosu::Window
       @camera.zoom_out
     when Gosu::KbSpace
       @camera.reset
+    when Gosu::MsLeft
+      @game.handle_click(mouse_x, mouse_y)
     end
   end
 
   def update
     @clock.tick?
+
     @camera.move_left if button_down?(Gosu::KbA)
     @camera.move_right if button_down?(Gosu::KbD)
     @camera.move_up if button_down?(Gosu::KbW)
@@ -48,11 +51,7 @@ class GameWindow < Gosu::Window
 
   def draw
     @clock.draw
-    translate(-@camera.pos.x, -@camera.pos.y) do
-      scale(@camera.zoom, @camera.zoom, @camera.pos.x, @camera.pos.y) do
-        @game.draw(@camera)
-      end
-    end
+    @game.draw
   end
 end
 

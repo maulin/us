@@ -1,24 +1,29 @@
+require_relative './quad'
+
 class Star
-  SIZE = 4
+  SIZE = 6
 
-  attr_reader :pos
+  attr_reader :pos, :name
 
-  def initialize(pos, color)
+  def initialize(pos:, color:, name:)
     @pos = pos
     @color = color
+    @name = name
+
+    @quad = Quad.new(
+      Point.new(pos.x - SIZE, pos.y - SIZE),
+      Point.new(pos.x + SIZE, pos.y - SIZE),
+      Point.new(pos.x - SIZE, pos.y + SIZE),
+      Point.new(pos.x + SIZE, pos.y + SIZE)
+    )
   end
 
   def draw
-    nw = Point.new(pos.x - SIZE, pos.y - SIZE)
-    sw = Point.new(pos.x - SIZE, pos.y + SIZE)
-    ne = Point.new(pos.x + SIZE, pos.y - SIZE)
-    se = Point.new(pos.x + SIZE, pos.y + SIZE)
-
-    G.draw_quad(nw, ne, sw, se, @color)
+    G.draw_quad(quad: @quad, color: @color)
   end
 
   def to_s
-    pos.to_s
+    "STAR: #{@name}, POS: #{pos}"
   end
 
   def width
