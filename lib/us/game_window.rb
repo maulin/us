@@ -27,10 +27,13 @@ module Us
       when Gosu::MsLeft
         pos = Point.new(mouse_x, mouse_y)
         Us.game_state.handle_click(pos)
+      when Gosu::KbReturn
+        Us.game_state.handle_return
       end
     end
 
     def update
+      Us.game_state.update
       @camera.move_left if button_down?(Gosu::KbA)
       @camera.move_right if button_down?(Gosu::KbD)
       @camera.move_up if button_down?(Gosu::KbW)

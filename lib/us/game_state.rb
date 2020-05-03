@@ -1,40 +1,77 @@
-require_relative './g'
+require 'pstore'
+
 require_relative './menu'
 require_relative './menu/game'
+require_relative './menu/user'
+require_relative './menu/hud'
 require_relative './game'
 
 module Us
   class GameState
-    TransitionError = Class.new(StandardError)
+    attr_reader :state
 
     def initialize
-      unstarted
+      @store = PStore.new("us.pstore")
+      @client ||= Client.new
+
+      if current_user
+        setup_game
+      else
+        setup_user
+      end
     end
 
-    def unstarted
+    def setup_user
+      @state_obj = Menu::User.new(state: self)
+      @state = :create_user
+    end
+
+    def setup_game
+      Server.start
+      @state_obj = Menu::Game.new(state: self)
       @state = :unstarted
-      Us.start_server
-      @state_obj = Menu::Game.new
     end
 
-    def create
-      raise TransitionError unless @state == :unstarted
-
+    def create_game
+      game_data = JSON.parse(@client.create_game.body)
+      @state_obj = Game.new(game_data, self)
       @state = :created
-      game_data = JSON.parse(Us.client.create_game.body)
-      @state_obj = Game.new(game_data)
+    end
+
+    def update_game
+      @state = :updating
+      game_data = JSON.parse(@client.update_game.body)
+      @state_obj.update_objects(game_data)
+      @state = :running
+    end
+
+    def current_user
+      @store.transaction(true) { @store.fetch("user.name", nil) }
+    end
+
+    def create_user(name:)
+      @store.transaction do 
+        @store["user.name"] = name
+      end
     end
 
     def handle_click(pos)
       @state_obj.handle_click(pos)
     end
+    
+    def handle_return
+      return unless @state == :create_user
+      @state_obj.handle_return
+    end
 
     def draw
-      G.window.translate(-Us.camera.pos.x, -Us.camera.pos.y) do
-        G.window.scale(Us.camera.zoom, Us.camera.zoom, Us.camera.pos.x, Us.camera.pos.y) do
-          @state_obj.draw
-        end
-      end
+      @state_obj.draw
+    end
+
+    def update
+      return unless @state_obj.is_a? Game
+
+      @state_obj.update
     end
   end
 end

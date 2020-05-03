@@ -8,7 +8,8 @@ module Us
       HEIGHT = 400
       WIDTH = 800
 
-      def initialize
+      def initialize(state:)
+        @state = state
         @quad = Quad.new(
           Point.new((GameWindow::WIDTH/2) - WIDTH/2, (GameWindow::HEIGHT/2) - HEIGHT/2),
           Point.new((GameWindow::WIDTH/2) + WIDTH/2, (GameWindow::HEIGHT/2) - HEIGHT/2),
@@ -40,7 +41,7 @@ module Us
 
       def handle_click(pos)
         if @create_button_quad.contains?(pos)
-          Us.create_game
+          @state.create_game
         end
       end
     end
