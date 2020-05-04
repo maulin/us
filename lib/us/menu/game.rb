@@ -35,7 +35,7 @@ module Us
 
       def draw_background
         G.draw_quad(quad: @quad, color: :blue_dark, z: 10)
-        G.draw_quad(quad: @create_button_quad, color: :blue_button, z: 20)
+        G.draw_quad(quad: @create_button_quad, color: :blue_light, z: 20)
         G.draw_text(text: "Create Game", pos: @create_text_pos, z: 30, size: :medium)
       end
 

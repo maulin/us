@@ -29,7 +29,7 @@ module Us
       end
 
       def production
-        puts "PRODUCTION CYCLE COMPLETE"
+        puts "GAME: production cycle complete"
       end
 
       def add_player(name:)
@@ -60,7 +60,8 @@ module Us
             tick_start_time: @clock.tick_start_time,
             cycle_counter: @clock.cycle_counter
           },
-          stars: @map.stars.map(&:client_resp)
+          stars: @map.stars.map(&:client_resp),
+          players: @players.map(&:client_resp)
         }.to_json
       end
     end

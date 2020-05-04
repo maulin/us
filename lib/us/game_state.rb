@@ -39,10 +39,8 @@ module Us
     end
 
     def update_game
-      @state = :updating
       game_data = JSON.parse(@client.update_game.body)
       @state_obj.update_objects(game_data)
-      @state = :running
     end
 
     def current_user
