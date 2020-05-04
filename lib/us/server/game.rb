@@ -8,14 +8,13 @@ module Us
       START_STARS = 6
       START_STARS_MAX_DISTANCE = 150
 
-      def initialize(state: state)
+      def initialize
         @clock = Clock.new
-        @state = state
         @players = []
         @map = Map.new
 
         puts "GAME: game #{@id} initialized"
-        add_player(name: @state.current_user)
+        add_player(name: Us.current_user)
       end
 
       def run
@@ -55,11 +54,7 @@ module Us
 
       def to_json
         {
-          clock: {
-            ticks: @clock.ticks,
-            tick_start_time: @clock.tick_start_time,
-            cycle_counter: @clock.cycle_counter
-          },
+          clock: @clock.client_resp,
           stars: @map.stars.map(&:client_resp),
           players: @players.map(&:client_resp)
         }.to_json

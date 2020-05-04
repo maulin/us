@@ -2,21 +2,16 @@ module Us
   module Server
     class Clock
       TICK_INTERVAL = 5
-      CYCLE_TICKS = 2
-      CYCLE_COUNTER = TICK_INTERVAL * CYCLE_TICKS
+      PROD_TICKS = 2
+      PROD_INTERVAL = TICK_INTERVAL * PROD_TICKS
 
-      attr_reader :ticks, :tick_start_time, :cycle_counter
+      attr_reader :ticks, :tick_start_time
 
       def initialize
         @start_time = current_time
         @ticks = 0
         @tick_start_time = current_time
-        @cycle_counter = CYCLE_COUNTER
-      end
-
-      def draw
-        time = "#{Time.now.strftime("%I:%M:%S %p")} - Tick: #{@tick}"
-        G.draw_text(text: time, pos: @clock_pos, z: 100, size: :medium)
+        @prod_interval = PROD_INTERVAL
       end
 
       def current_time
@@ -24,23 +19,30 @@ module Us
       end
 
       def tick
-        @cycle_counter -= 1
+        @prod_interval -= 1
         puts self
         sleep 1
       end
 
       def produce?
-        @cycle_counter == 0
+        @prod_interval == 0
       end
 
       def increment
         @ticks += 1
         @tick_start_time = current_time
-        @cycle_counter = CYCLE_COUNTER
+        @prod_interval = PROD_INTERVAL
       end
 
       def to_s
-        "CLOCK: #{@ticks} - #{@cycle_counter}"
+        "CLOCK: #{@ticks} - #{@prod_interval}"
+      end
+
+      def client_resp
+        {
+          ticks: @ticks,
+          tick_start_time: @tick_start_time
+        }
       end
     end
   end

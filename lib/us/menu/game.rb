@@ -8,13 +8,12 @@ module Us
       HEIGHT = 400
       WIDTH = 800
 
-      def initialize(state:)
-        @state = state
+      def initialize
         @quad = Quad.new(
-          Point.new((GameWindow::WIDTH/2) - WIDTH/2, (GameWindow::HEIGHT/2) - HEIGHT/2),
-          Point.new((GameWindow::WIDTH/2) + WIDTH/2, (GameWindow::HEIGHT/2) - HEIGHT/2),
-          Point.new((GameWindow::WIDTH/2) - WIDTH/2, (GameWindow::HEIGHT/2) + HEIGHT/2),
-          Point.new((GameWindow::WIDTH/2) + WIDTH/2, (GameWindow::HEIGHT/2) + HEIGHT/2),
+          Point.new((Us::WIDTH/2) - WIDTH/2, (Us::HEIGHT/2) - HEIGHT/2),
+          Point.new((Us::WIDTH/2) + WIDTH/2, (Us::HEIGHT/2) - HEIGHT/2),
+          Point.new((Us::WIDTH/2) - WIDTH/2, (Us::HEIGHT/2) + HEIGHT/2),
+          Point.new((Us::WIDTH/2) + WIDTH/2, (Us::HEIGHT/2) + HEIGHT/2),
         )
 
         offset = @quad.p1
@@ -41,7 +40,7 @@ module Us
 
       def handle_click(pos)
         if @create_button_quad.contains?(pos)
-          @state.create_game
+          Us.create_game
         end
       end
     end

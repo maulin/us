@@ -1,13 +1,11 @@
 module G
   COLORS = {
-    :p_orange => Gosu::Color.new(223,95,0),
-    :p_blue => Gosu::Color::BLUE,
     :blue_dark => Gosu::Color.new(26,28,68),
     :blue_light => Gosu::Color.new(89,97,187),
-    :black => Gosu::Color::BLACK,
-    :blue => Gosu::Color::BLUE,
-    :white => Gosu::Color::WHITE,
     :gray => Gosu::Color::GRAY,
+    :p_blue => Gosu::Color::BLUE,
+    :p_orange => Gosu::Color.new(223,95,0),
+    :white => Gosu::Color::WHITE,
   }
 
   FONT_SIZES = {

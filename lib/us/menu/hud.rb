@@ -1,12 +1,11 @@
 require_relative '../quad'
 require_relative '../point'
-require_relative '../game_window'
 
 module Us
   module Menu
     class Hud
       PLAYERS = 6
-      WIDTH = Us::GameWindow::WIDTH * 0.20
+      WIDTH = Us::WIDTH * 0.20
       CLOCK_H = 50
       PLAYER_H = 50
 

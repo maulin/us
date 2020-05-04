@@ -1,6 +1,5 @@
 require_relative '../quad'
 require_relative '../point'
-require_relative '../game_window'
 
 module Us
   module Menu
@@ -8,18 +7,17 @@ module Us
       HEIGHT = 400
       WIDTH = 800
 
-      def initialize(state:)
-        @state = state
+      def initialize(window)
         @quad = Quad.new(
-          Point.new((GameWindow::WIDTH/2) - WIDTH/2, (GameWindow::HEIGHT/2) - HEIGHT/2),
-          Point.new((GameWindow::WIDTH/2) + WIDTH/2, (GameWindow::HEIGHT/2) - HEIGHT/2),
-          Point.new((GameWindow::WIDTH/2) - WIDTH/2, (GameWindow::HEIGHT/2) + HEIGHT/2),
-          Point.new((GameWindow::WIDTH/2) + WIDTH/2, (GameWindow::HEIGHT/2) + HEIGHT/2),
+          Point.new((Us::WIDTH/2) - WIDTH/2, (Us::HEIGHT/2) - HEIGHT/2),
+          Point.new((Us::WIDTH/2) + WIDTH/2, (Us::HEIGHT/2) - HEIGHT/2),
+          Point.new((Us::WIDTH/2) - WIDTH/2, (Us::HEIGHT/2) + HEIGHT/2),
+          Point.new((Us::WIDTH/2) + WIDTH/2, (Us::HEIGHT/2) + HEIGHT/2),
         )
 
         text_input = Gosu::TextInput.new
         text_input.text = "Enter your name"
-        G.window.text_input = text_input
+        window.text_input = text_input
       end
 
       def draw
@@ -37,8 +35,7 @@ module Us
       end
 
       def handle_return
-        @state.create_user(name: G.window.text_input.text)
-        @state.setup_game
+        Us.create_user(name: G.window.text_input.text)
       end
     end
   end
