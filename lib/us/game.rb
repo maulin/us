@@ -43,7 +43,7 @@ module Us
       current_time = Time.now.utc.to_i
       return unless current_time - @last_update > 1
 
-      if Time.now.utc.to_i - @tick_start_time > Us::Server::Clock::PROD_INTERVAL
+      if current_time - @tick_start_time > Us::Server::Clock::PROD_INTERVAL
         Us.update_game
       end
     end

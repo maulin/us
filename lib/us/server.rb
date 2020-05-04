@@ -6,20 +6,18 @@ require_relative './server/game'
 module Us
   module Server
     class << self
-      attr_accessor :game
+      attr_accessor :game, :pid
     end
 
     def self.start
-      return if @pid
-
-      @pid = fork do
-        WEBrick::Daemon.start
+      pid = fork do
+        puts "STARTING SERVER"
         server = WEBrick::HTTPServer.new(:Port => 2009)
+        trap('INT') { server.shutdown }
         server.mount '/games', Games
         server.start
       end
-      puts @pid
-      Process.detach(@pid)
+      Process.detach(pid)
     end
 
     class Games < WEBrick::HTTPServlet::AbstractServlet
@@ -39,7 +37,6 @@ module Us
       end
 
       def do_GET(req, res)
-        puts "SERVER GET GAME"
         res['Content-Type'] = 'Application/Json'
         res.body = Server.game.to_json
       end

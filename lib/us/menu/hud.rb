@@ -66,9 +66,6 @@ module Us
           end
         end
       end
-
-      def handle_click
-      end
     end
   end
 end
