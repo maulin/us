@@ -10,10 +10,10 @@ module Us
 
       def initialize
         @quad = Quad.new(
-          Point.new((GameWindow::WIDTH/2) - WIDTH/2, (GameWindow::HEIGHT/2) - HEIGHT/2),
-          Point.new((GameWindow::WIDTH/2) + WIDTH/2, (GameWindow::HEIGHT/2) - HEIGHT/2),
-          Point.new((GameWindow::WIDTH/2) - WIDTH/2, (GameWindow::HEIGHT/2) + HEIGHT/2),
-          Point.new((GameWindow::WIDTH/2) + WIDTH/2, (GameWindow::HEIGHT/2) + HEIGHT/2),
+          Point.new((Us::WIDTH/2) - WIDTH/2, (Us::HEIGHT/2) - HEIGHT/2),
+          Point.new((Us::WIDTH/2) + WIDTH/2, (Us::HEIGHT/2) - HEIGHT/2),
+          Point.new((Us::WIDTH/2) - WIDTH/2, (Us::HEIGHT/2) + HEIGHT/2),
+          Point.new((Us::WIDTH/2) + WIDTH/2, (Us::HEIGHT/2) + HEIGHT/2),
         )
 
         offset = @quad.p1
@@ -34,7 +34,7 @@ module Us
 
       def draw_background
         G.draw_quad(quad: @quad, color: :blue_dark, z: 10)
-        G.draw_quad(quad: @create_button_quad, color: :blue_button, z: 20)
+        G.draw_quad(quad: @create_button_quad, color: :blue_light, z: 20)
         G.draw_text(text: "Create Game", pos: @create_text_pos, z: 30, size: :medium)
       end
 

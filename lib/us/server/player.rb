@@ -1,7 +1,7 @@
 module Us
   module Server
     class Player
-      COLORS = [:blue, :yellow]
+      COLORS = [:p_blue, :p_orange]
 
       attr_reader :id, :name, :color
 
@@ -14,6 +14,14 @@ module Us
 
       def to_s
         "PLAYER: #{@name} - #{@color}"
+      end
+
+      def client_resp
+        {
+          id: id,
+          name: name,
+          color: color
+        }
       end
     end
   end

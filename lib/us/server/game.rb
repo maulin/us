@@ -1,5 +1,6 @@
 require_relative './player'
 require_relative './map'
+require_relative './clock'
 
 module Us
   module Server
@@ -8,14 +9,29 @@ module Us
       START_STARS_MAX_DISTANCE = 150
 
       def initialize
+        @clock = Clock.new
         @players = []
         @map = Map.new
 
         puts "GAME: game #{@id} initialized"
-        add_player
+        add_player(name: Us.current_user)
       end
 
-      def add_player(name: "Maulin")
+      def run
+        loop do
+          @clock.tick
+          if @clock.produce?
+            production
+            @clock.increment
+          end
+        end
+      end
+
+      def production
+        puts "GAME: production cycle complete"
+      end
+
+      def add_player(name:)
         return if @players.size == @max_players
 
         player_id = @players.count + 1
@@ -38,7 +54,9 @@ module Us
 
       def to_json
         {
-          stars: @map.stars.map(&:client_resp)
+          clock: @clock.client_resp,
+          stars: @map.stars.map(&:client_resp),
+          players: @players.map(&:client_resp)
         }.to_json
       end
     end

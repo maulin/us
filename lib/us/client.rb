@@ -14,7 +14,11 @@ module Us
     end
 
     def create_game
-      http.post('/games', "")
+      http.post('/games', '')
+    end
+
+    def update_game
+      http.get('/games')
     end
   end
 end
