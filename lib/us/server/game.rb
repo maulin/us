@@ -36,7 +36,6 @@ module Us
       end
 
       def game_full?
-        pp @players.size == MAX_PLAYERS
         @players.size == MAX_PLAYERS
       end
 

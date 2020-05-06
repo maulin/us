@@ -32,7 +32,6 @@ module Us
 
       @players = data['players'].map { |p| Player.new(id: p['id'], name: p['name'], color: p['color']) }
       @last_update = Time.now.utc.to_i
-      pp data['clock']
     end
 
     def clock
@@ -48,7 +47,6 @@ module Us
       return unless @state == :started
       current_time = Time.now.utc.to_i
       if current_time - @tick_start_time > Us::Server::Clock::PROD_INTERVAL && current_time - @last_update > 1
-        puts "WTF #{current_time} - #{@tick_start_time} - difference: #{current_time - @tick_start_time}"
         Us.update_game
       end
     end
