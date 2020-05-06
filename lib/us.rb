@@ -29,7 +29,7 @@ module Us
   end
 
   def self.join_game
-    game_data = JSON.parse(@client.join_game)
+    game_data = JSON.parse(@client.join_game.body)
     @game = Game.new(data: game_data)
   end
 

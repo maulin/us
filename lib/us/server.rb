@@ -60,7 +60,7 @@ module Us
         return unless game
 
         name = JSON.parse(req.body)['name']
-        game.add_player(name)
+        game.add_player(name: name)
 
         res['Content-Type'] = 'Application/Json'
         res.body = game.to_json
