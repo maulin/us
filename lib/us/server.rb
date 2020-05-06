@@ -11,16 +11,28 @@ module Us
 
     def self.start
       pid = fork do
-        puts "STARTING SERVER"
-        server = WEBrick::HTTPServer.new(:Port => 2009)
-        trap('INT') { server.shutdown }
-        server.mount '/games', Games
+        Process.setproctitle("us-game-server")
+        puts "SERVER: Starting server process"
+
+        log_file = File.new('server.log', 'w+')
+        log = WEBrick::Log.new(log_file)
+
+        # WEBrick::Daemon.start
+        server = WEBrick::HTTPServer.new(Port: 2009, Logger: log)
+        trap('TERM') do
+          server.shutdown
+          exit 0
+        end
+        server.mount '/game', GameServelet
+        server.mount '/players', PlayersServelet
         server.start
       end
+
+      puts pid
       Process.detach(pid)
     end
 
-    class Games < WEBrick::HTTPServlet::AbstractServlet
+    class GameServelet < WEBrick::HTTPServlet::AbstractServlet
       def do_POST(req, res)
         Thread.abort_on_exception = true
 
@@ -39,6 +51,21 @@ module Us
       def do_GET(req, res)
         res['Content-Type'] = 'Application/Json'
         res.body = Server.game.to_json
+      end
+    end
+
+    class PlayersServelet < WEBrick::HTTPServlet::AbstractServlet
+      def do_POST(req, res)
+        game = Server.game
+        return unless game
+
+        params = JSON.parse(req.body)
+        if !game.player?(id: params['id'])
+          game.add_player(name: params['name'])
+        end
+
+        res['Content-Type'] = 'Application/Json'
+        res.body = game.to_json
       end
     end
   end

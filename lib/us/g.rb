@@ -9,9 +9,9 @@ module G
   }
 
   FONT_SIZES = {
-    :small => 25,
-    :medium => 35,
-    :large => 45
+    :small => Gosu::Font.new(25, name: 'Fira Mono'),
+    :medium => Gosu::Font.new(35, name: 'Fira Mono'),
+    :large => Gosu::Font.new(45, name: 'Fira Mono')
   }
 
   class << self
@@ -27,16 +27,17 @@ module G
     )
   end
 
-  def self.draw_line(p1, p2, color)
+  def self.draw_line(p1:, p2:, z:, color:)
     color = COLORS[color]
     window.draw_line(
       p1.x, p1.y, color,
-      p2.x, p2.y, color
+      p2.x, p2.y, color,
+      z
     )
   end
 
   def self.image_from_text(text:, size:, options: {})
-    size = FONT_SIZES[size]
+    size = FONT_SIZES[size].height
     { font: 'Fira Mono' }.merge(options)
 
     Gosu::Image.from_text(text, size, options)
@@ -50,12 +51,12 @@ module G
 
   def self.draw_text(text:, pos:, z:, size:, color: :white)
     color = COLORS[color]
-    font = Gosu::Font.new(window, 'Fira Mono', FONT_SIZES[size])
+    font = FONT_SIZES[size]
     font.draw_text(text, pos.x, pos.y, z, 1, 1, color)
   end
 
   def self.text_width(text:, size:)
-    font = Gosu::Font.new(window, 'Fira Mono', FONT_SIZES[size])
+    font = FONT_SIZES[size]
     font.text_width(text)
   end
 

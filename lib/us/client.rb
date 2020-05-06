@@ -14,11 +14,19 @@ module Us
     end
 
     def create_game
-      http.post('/games', '')
+      http.post('/game', '')
     end
 
     def update_game
-      http.get('/games')
+      http.get('/game')
+    end
+
+    def join_game(body)
+      http.post(
+        '/players',
+        body.to_json,
+        'Content-Type' => 'application/json'
+      )
     end
   end
 end

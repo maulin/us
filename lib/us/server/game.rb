@@ -7,11 +7,13 @@ module Us
     class Game
       START_STARS = 6
       START_STARS_MAX_DISTANCE = 150
+      MAX_PLAYERS = 2
 
       def initialize
         @clock = Clock.new
         @players = []
         @map = Map.new
+        @state = :unstarted
 
         puts "GAME: game #{@id} initialized"
         add_player(name: Us.current_user)
@@ -19,10 +21,12 @@ module Us
 
       def run
         loop do
-          @clock.tick
-          if @clock.produce?
-            production
-            @clock.increment
+          if @state == :started
+            @clock.tick
+            if @clock.produce?
+              production
+              @clock.increment
+            end
           end
         end
       end
@@ -31,13 +35,29 @@ module Us
         puts "GAME: production cycle complete"
       end
 
+      def game_full?
+        @players.size == MAX_PLAYERS
+      end
+
+      def player?(id: id)
+        @players.find { |p| p.id == id }
+      end
+
       def add_player(name:)
-        return if @players.size == @max_players
+        return if game_full?
 
         player_id = @players.count + 1
         player = Player.new(id: next_player_id, name: name, color: next_player_color)
         @players << player
         init_stars_for(player: player)
+
+        start if game_full?
+      end
+
+      def start
+        @clock.start
+        @state = :started
+        puts "GAME: Starting!"
       end
 
       def next_player_color
@@ -54,6 +74,7 @@ module Us
 
       def to_json
         {
+          state: @state,
           clock: @clock.client_resp,
           stars: @map.stars.map(&:client_resp),
           players: @players.map(&:client_resp)

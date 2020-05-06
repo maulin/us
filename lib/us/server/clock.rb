@@ -1,17 +1,21 @@
 module Us
   module Server
     class Clock
-      TICK_INTERVAL = 5
+      TICK_INTERVAL = 10
       PROD_TICKS = 2
       PROD_INTERVAL = TICK_INTERVAL * PROD_TICKS
 
       attr_reader :ticks, :tick_start_time
 
       def initialize
-        @start_time = current_time
         @ticks = 0
-        @tick_start_time = current_time
+        @tick_start_time = 0
         @prod_interval = PROD_INTERVAL
+      end
+
+      def start
+        @start_time = current_time
+        @tick_start_time = current_time
       end
 
       def current_time
