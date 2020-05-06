@@ -24,15 +24,17 @@ module Us
     end
 
     def update_objects(data)
-      return if data['clock']['ticks'] <= @ticks
-
       @state = data['state'].to_sym
+
+      return if data['clock']['ticks'] <= @ticks && @state == :started
+
       @stars = data['stars']
       @ticks = data['clock']['ticks']
       @tick_start_time = data['clock']['tick_start_time']
 
       @players = data['players'].map { |p| Player.new(id: p['id'], name: p['name'], color: p['color']) }
       @last_update = Time.now.utc.to_i
+      puts @state
     end
 
     def clock

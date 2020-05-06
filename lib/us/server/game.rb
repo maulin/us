@@ -53,6 +53,7 @@ module Us
       def start
         @clock.start
         @state == :started
+        puts "GAME: Starting!"
       end
 
       def next_player_color
