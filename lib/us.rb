@@ -24,7 +24,13 @@ module Us
   def self.create_user(name:)
     @store.transaction do
       @store["user.name"] = name
+      @current_user = name
     end
+  end
+
+  def self.join_game
+    game_data = JSON.parse(@client.join_game)
+    @game = Game.new(data: game_data)
   end
 
   def self.create_game

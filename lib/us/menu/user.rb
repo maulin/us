@@ -15,8 +15,12 @@ module Us
           Point.new((Us::WIDTH/2) + WIDTH/2, (Us::HEIGHT/2) + HEIGHT/2),
         )
 
+        @text_box_quad = Quad.new(
+          Point.new(1000, 600), Point.new(1500, 600),
+          Point.new(1000, 700), Point.new(1500, 700),
+        )
+        @font ||= Gosu::Font.new(45, name: 'Fira Mono')
         text_input = Gosu::TextInput.new
-        text_input.text = "Enter your name"
         window.text_input = text_input
       end
 
@@ -26,8 +30,11 @@ module Us
       end
 
       def draw_input
-        @font ||= Gosu::Font.new(35, name: 'Fira Mono')
-        @font.draw(G.window.text_input.text, 1000, 600, 20)
+        G.window.draw_rect(1030, 650, 500, 100, Gosu::Color::GRAY, 20)
+        offset = G.window.text_input.text.size * 23
+        @font.draw_text('Enter your name', 1030, 600, 30)
+        @font.draw_text(G.window.text_input.text, 1030, 680, 30)
+        G.window.draw_rect(1030 + offset, 650, 10, 100, Gosu::Color::WHITE, 30)
       end
 
       def draw_background
