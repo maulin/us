@@ -1,7 +1,7 @@
 module Us
   module Server
     class Clock
-      TICK_INTERVAL = 5
+      TICK_INTERVAL = 10
       PROD_TICKS = 2
       PROD_INTERVAL = TICK_INTERVAL * PROD_TICKS
 

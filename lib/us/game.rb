@@ -26,6 +26,7 @@ module Us
     def update_objects(data)
       return if data['clock']['ticks'] <= @ticks
 
+      @state = data['state'].to_sym
       @stars = data['stars']
       @ticks = data['clock']['ticks']
       @tick_start_time = data['clock']['tick_start_time']
@@ -35,17 +36,25 @@ module Us
     end
 
     def clock
-      time_since_last_tick = Time.now.utc.to_i - @tick_start_time
-      "#{Gosu.fps} Production: #{Us::Server::Clock::PROD_INTERVAL - time_since_last_tick}s"
+      if @state == :started
+        time_since_last_tick = Time.now.utc.to_i - @tick_start_time
+        "#{Gosu.fps} Production: #{Us::Server::Clock::PROD_INTERVAL - time_since_last_tick}s"
+      else
+        "#{Gosu.fps} Unstarted"
+      end
     end
 
     def update
-      current_time = Time.now.utc.to_i
-      return unless current_time - @last_update > 1
+      return unless @state == :started
 
-      if current_time - @tick_start_time > Us::Server::Clock::PROD_INTERVAL
+      current_time = Time.now.utc.to_i
+      if current_time - @tick_start_time > Us::Server::Clock::PROD_INTERVAL && current_time - @last_update > 1
         Us.update_game
       end
+    end
+
+    def handle_click(pos)
+      @hud.handle_click(pos)
     end
   end
 end
