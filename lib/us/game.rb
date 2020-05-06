@@ -46,9 +46,9 @@ module Us
 
     def update
       return unless @state == :started
-
       current_time = Time.now.utc.to_i
       if current_time - @tick_start_time > Us::Server::Clock::PROD_INTERVAL && current_time - @last_update > 1
+        puts "WTF"
         Us.update_game
       end
     end

@@ -46,7 +46,13 @@ module Us
         player = Player.new(id: next_player_id, name: name, color: next_player_color)
         @players << player
         init_stars_for(player: player)
-        @state = :started if game_full?
+
+        start if game_full?
+      end
+
+      def start
+        @clock.start
+        @state == :started
       end
 
       def next_player_color
