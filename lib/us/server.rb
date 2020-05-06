@@ -59,8 +59,10 @@ module Us
         game = Server.game
         return unless game
 
-        name = JSON.parse(req.body)['name']
-        game.add_player(name: name)
+        params = JSON.parse(req.body)
+        if !game.player?(id: params['id'])
+          game.add_player(name: params['name'])
+        end
 
         res['Content-Type'] = 'Application/Json'
         res.body = game.to_json

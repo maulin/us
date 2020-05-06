@@ -21,10 +21,10 @@ module Us
       http.get('/game')
     end
 
-    def join_game
+    def join_game(body)
       http.post(
         '/players',
-        { name: Us.current_user }.to_json,
+        body.to_json,
         'Content-Type' => 'application/json'
       )
     end

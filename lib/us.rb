@@ -29,7 +29,12 @@ module Us
   end
 
   def self.join_game
-    game_data = JSON.parse(@client.join_game.body)
+    id = @store.transaction(true) { @store.fetch("user.game_id", nil) }
+    body = {
+      name: current_user,
+      id: id
+    }
+    game_data = JSON.parse(@client.join_game(body).body)
     @game = Game.new(data: game_data)
   end
 

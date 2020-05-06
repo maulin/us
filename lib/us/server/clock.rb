@@ -16,6 +16,7 @@ module Us
       def start
         @start_time = current_time
         @tick_start_time = current_time
+        puts "CLOCK START: #{@tick_start_time}"
       end
 
       def current_time

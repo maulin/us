@@ -36,7 +36,12 @@ module Us
       end
 
       def game_full?
+        pp @players.size == MAX_PLAYERS
         @players.size == MAX_PLAYERS
+      end
+
+      def player?(id: id)
+        @players.find { |p| p.id == id }
       end
 
       def add_player(name:)
@@ -52,7 +57,7 @@ module Us
 
       def start
         @clock.start
-        @state == :started
+        @state = :started
         puts "GAME: Starting!"
       end
 

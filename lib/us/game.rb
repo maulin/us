@@ -26,15 +26,13 @@ module Us
     def update_objects(data)
       @state = data['state'].to_sym
 
-      return if data['clock']['ticks'] <= @ticks && @state == :started
-
       @stars = data['stars']
       @ticks = data['clock']['ticks']
       @tick_start_time = data['clock']['tick_start_time']
 
       @players = data['players'].map { |p| Player.new(id: p['id'], name: p['name'], color: p['color']) }
       @last_update = Time.now.utc.to_i
-      puts @state
+      pp data['clock']
     end
 
     def clock
@@ -50,7 +48,7 @@ module Us
       return unless @state == :started
       current_time = Time.now.utc.to_i
       if current_time - @tick_start_time > Us::Server::Clock::PROD_INTERVAL && current_time - @last_update > 1
-        puts "WTF"
+        puts "WTF #{current_time} - #{@tick_start_time} - difference: #{current_time - @tick_start_time}"
         Us.update_game
       end
     end
