@@ -12,9 +12,7 @@ module Us
     end
 
     def handle_click(pos)
-      puts "star pos #{@center}"
       vec = Vector.new(@center, pos)
-      puts vec.magnitude
       puts "STAR CLICKED!" if vec.magnitude < SIZE
     end
   end
