@@ -52,6 +52,6 @@ module Us
     id = @store.transaction(true) { @store.fetch('game.player_id', nil) }
     body = { player_id: id }
     game_data = JSON.parse(@client.update_game(body).body)
-    @game.update_objects(game_data)
+    @game ? @game.update_objects(game_data) : @game = Game.new(data: game_data)
   end
 end
