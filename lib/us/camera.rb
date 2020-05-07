@@ -2,10 +2,10 @@ require_relative './point'
 
 module Us
   class Camera
-    ZOOM_MAX = 3
+    ZOOM_MAX = 2
     ZOOM_MIN = 1
-    ZOOM_INTERVAL = 0.5
-    SPEED = 10
+    ZOOM_INTERVAL = 0.2
+    SPEED = 15
 
     attr_reader :pos, :zoom
 
@@ -17,24 +17,25 @@ module Us
     end
 
     def reset
-      @pos = Point.new(0, 0)
+      @pos.x = 0
+      @pos.y = 0
       @zoom = ZOOM_MIN
     end
 
     def move_left
-      @pos = Point.new(@pos.x - SPEED, @pos.y)
+      @pos.x += SPEED
     end
 
     def move_right
-      @pos = Point.new(@pos.x + SPEED, @pos.y)
+      @pos.x -= SPEED
     end
 
     def move_up
-      @pos = Point.new(@pos.x, @pos.y - SPEED)
+      @pos.y += SPEED
     end
 
     def move_down
-      @pos = Point.new(@pos.x, @pos.y + SPEED)
+      @pos.y -= SPEED
     end
 
     def zoom_in
@@ -47,6 +48,10 @@ module Us
       return if @zoom <= ZOOM_MIN
 
       @zoom -= ZOOM_INTERVAL
+    end
+
+    def to_s
+      "CAM: #{@pos} - #{@zoom}"
     end
   end
 end

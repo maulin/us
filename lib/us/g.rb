@@ -15,7 +15,21 @@ module G
   }
 
   class << self
-    attr_accessor :window
+    attr_accessor :window, :camera
+  end
+
+  def self.unzoom_and_translate(pos)
+    pos.x = (pos.x / camera.zoom) - camera.pos.x
+    pos.y = (pos.y / camera.zoom) - camera.pos.y
+    pos
+  end
+
+  def self.draw_with_camera
+    window.scale(camera.zoom) do
+      window.translate(camera.pos.x, camera.pos.y) do
+        yield
+      end
+    end
   end
 
   def self.draw_quad(quad:, color:, z: 0)
