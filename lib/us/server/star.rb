@@ -5,10 +5,9 @@ module Us
 
       attr_reader :pos, :name
 
-      def initialize(pos:, color:, name:, owner:)
+      def initialize(pos:, name:, owner:)
         @ships = 0
         @pos = pos
-        @color = color
         @name = name
         @owner = owner
         puts "GAME: #{self} created"
@@ -40,9 +39,10 @@ module Us
         {
           x: pos.x - SIZE,
           y: pos.y - SIZE,
-          n: name,
-          o: @owner.id,
-          c: @color
+          cx: pos.x,
+          cy: pos.y,
+          name: name,
+          owner: @owner.id,
         }
       end
     end

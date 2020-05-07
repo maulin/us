@@ -68,12 +68,12 @@ module Us
         params = JSON.parse(req.body)
         res['Content-Type'] = 'Application/Json'
 
-        player = {}
-        if !game.player?(id: params['id'])
+        player = game.player?(id: params['id'])
+        if !player
           player = game.add_player(name: params['name'])
         end
 
-        res.body = player.to_json
+        res.body = player.basic_resp.to_json
       end
     end
   end

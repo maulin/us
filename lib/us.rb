@@ -28,16 +28,6 @@ module Us
     end
   end
 
-  def self.join_game
-    id = @store.transaction(true) { @store.fetch('game.player_id', nil) }
-    body = { name: current_user, id: id }
-
-    player_id = @client.join_game(body)['id']
-    @store.transaction { @store['game.player_id'] = player_id }
-
-    update_game
-  end
-
   def self.create_game
     Server.start
     sleep 1
@@ -46,6 +36,16 @@ module Us
     @game = Game.new(data: game_data)
 
     join_game
+  end
+
+  def self.join_game
+    id = @store.transaction(true) { @store.fetch('game.player_id', nil) }
+    body = { name: current_user, id: id }
+
+    resp = JSON.parse(@client.join_game(body).body)
+    @store.transaction { @store['game.player_id'] = resp['id'] }
+
+    update_game
   end
 
   def self.update_game

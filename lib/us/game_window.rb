@@ -1,4 +1,3 @@
-require_relative './camera'
 require_relative './game'
 require_relative './quad'
 require_relative './menu/game'
@@ -9,7 +8,6 @@ module Us
     def initialize
       super(WIDTH, HEIGHT)
       self.caption = "Uranus's Shame"
-      @camera = Camera.new(WIDTH, HEIGHT)
       @user_menu = Us::Menu::User.new(self)
       @game_menu = Us::Menu::Game.new
     end
@@ -21,11 +19,11 @@ module Us
     def button_down(id)
       case id
       when Gosu::MsWheelDown
-        @camera.zoom_in
+        G.camera.zoom_in
       when Gosu::MsWheelUp
-        @camera.zoom_out
+        G.camera.zoom_out
       when Gosu::KbSpace
-        @camera.reset
+        G.camera.reset
       when Gosu::MsLeft
         pos = Point.new(mouse_x, mouse_y)
         interactor.handle_click(pos)
@@ -36,10 +34,10 @@ module Us
 
     def update
       interactor.update if interactor.is_a?(Game)
-      @camera.move_left if button_down?(Gosu::KbA)
-      @camera.move_right if button_down?(Gosu::KbD)
-      @camera.move_up if button_down?(Gosu::KbW)
-      @camera.move_down if button_down?(Gosu::KbS)
+      G.camera.move_left if button_down?(Gosu::KbA)
+      G.camera.move_right if button_down?(Gosu::KbD)
+      G.camera.move_up if button_down?(Gosu::KbW)
+      G.camera.move_down if button_down?(Gosu::KbS)
     end
 
     def interactor

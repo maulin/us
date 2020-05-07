@@ -68,7 +68,9 @@ module Us
       def handle_click(pos)
         if @clock_quad.contains?(pos)
           Us.update_game
+          return true
         end
+        false
       end
     end
   end

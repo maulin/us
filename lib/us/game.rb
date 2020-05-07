@@ -1,4 +1,5 @@
 require_relative 'player'
+require_relative 'star'
 require_relative './menu/hud'
 
 module Us
@@ -16,21 +17,25 @@ module Us
 
     def draw
       @hud.draw
-      @stars.each do |s|
-        @star.draw(s['x'], s['y'], 10)
-        owner = players.find { |p| p.id == s['o'] }
-        owner.ring.draw(s['x'], s['y'], 10)
+      G.zoom_to_camera do
+        G.translate_to_camera do
+          @stars[0..0].each do |s|
+            @star.draw(s.pos.x, s.pos.y, 10)
+            s.owner.ring.draw(s.pos.x, s.pos.y, 10)
+          end
+        end
       end
     end
 
     def update_objects(data)
       @state = data['state'].to_sym
 
-      @stars = data['stars']
       @ticks = data['clock']['ticks']
       @tick_start_time = data['clock']['tick_start_time']
 
-      @players = data['players'].map { |p| Player.new(id: p['id'], name: p['name'], color: p['color']) }
+      @players = data['players'].map { |p| Player.new(data: p) }
+      @stars = data['stars'].map { |s| Star.new(data: s, players: @players) }
+
       @last_update = Time.now.utc.to_i
     end
 
@@ -53,6 +58,12 @@ module Us
 
     def handle_click(pos)
       @hud.handle_click(pos)
+      puts G.camera
+      puts "pos before translate: #{pos}"
+      pos.x = (pos.x / G.camera.zoom) - G.camera.pos.x
+      pos.y = (pos.y / G.camera.zoom) - G.camera.pos.y
+      puts "pos after translate: #{pos}"
+      @stars[0].handle_click(pos)
     end
   end
 end

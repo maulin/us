@@ -38,7 +38,7 @@ module Us
         @players.size == MAX_PLAYERS
       end
 
-      def player?(id: id)
+      def player?(id:)
         @players.find { |p| p.id == id }
       end
 
