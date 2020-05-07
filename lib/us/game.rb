@@ -17,12 +17,10 @@ module Us
 
     def draw
       @hud.draw
-      G.zoom_to_camera do
-        G.translate_to_camera do
-          @stars.each do |s|
-            @star.draw(s.pos.x, s.pos.y, 10)
-            s.owner.ring.draw(s.pos.x, s.pos.y, 10)
-          end
+      G.draw_with_camera do
+        @stars.each do |s|
+          @star.draw(s.pos.x, s.pos.y, 10)
+          s.owner.ring.draw(s.pos.x, s.pos.y, 10)
         end
       end
     end
@@ -58,8 +56,7 @@ module Us
 
     def handle_click(pos)
       @hud.handle_click(pos)
-      pos.x = (pos.x / G.camera.zoom) - G.camera.pos.x
-      pos.y = (pos.y / G.camera.zoom) - G.camera.pos.y
+      pos = G.unzoom_and_translate(pos)
       @stars.each { |s| s.handle_click(pos) }
     end
   end

@@ -18,15 +18,17 @@ module G
     attr_accessor :window, :camera
   end
 
-  def self.translate_to_camera
-    window.translate(camera.pos.x, camera.pos.y) do
-      yield
-    end
+  def self.unzoom_and_translate(pos)
+    pos.x = (pos.x / camera.zoom) - camera.pos.x
+    pos.y = (pos.y / camera.zoom) - camera.pos.y
+    pos
   end
 
-  def self.zoom_to_camera
+  def self.draw_with_camera
     window.scale(camera.zoom) do
-      yield
+      window.translate(camera.pos.x, camera.pos.y) do
+        yield
+      end
     end
   end
 

@@ -10,8 +10,6 @@ module Us
     end
 
     def self.start
-      $stdout.sync
-
       pid = fork do
         Process.setproctitle("us-game-server")
         puts "SERVER: Starting server process"
