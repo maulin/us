@@ -6,6 +6,7 @@ module Us
       attr_reader :pos, :name
 
       def initialize(pos:, color:, name:, owner:)
+        @ships = 0
         @pos = pos
         @color = color
         @name = name
@@ -25,7 +26,17 @@ module Us
         SIZE * 2
       end
 
-      def client_resp
+      def owned_by?(player_id:)
+        @owner.id == player_id
+      end
+
+      def full_resp
+        basic_resp.merge({
+          sh: @ships
+        })
+      end
+
+      def basic_resp
         {
           x: pos.x - SIZE,
           y: pos.y - SIZE,

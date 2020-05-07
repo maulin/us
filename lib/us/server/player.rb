@@ -6,6 +6,7 @@ module Us
       attr_reader :id, :name, :color
 
       def initialize(id:, name:, color:)
+        @researching = 'weapons'
         @id = id
         @name = name
         @color = color
@@ -16,7 +17,13 @@ module Us
         "PLAYER: #{@name} - #{@color}"
       end
 
-      def client_resp
+      def full_resp
+        basic_resp.merge({
+          researching: @researching
+        })
+      end
+
+      def basic_resp
         {
           id: id,
           name: name,

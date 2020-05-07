@@ -16,7 +16,6 @@ module Us
         @state = :unstarted
 
         puts "GAME: game #{@id} initialized"
-        add_player(name: Us.current_user)
       end
 
       def run
@@ -32,7 +31,7 @@ module Us
       end
 
       def production
-        puts "GAME: production cycle complete"
+        puts 'GAME: production cycle complete'
       end
 
       def game_full?
@@ -50,14 +49,14 @@ module Us
         player = Player.new(id: next_player_id, name: name, color: next_player_color)
         @players << player
         init_stars_for(player: player)
-
         start if game_full?
+        player
       end
 
       def start
         @clock.start
         @state = :started
-        puts "GAME: Starting!"
+        puts 'GAME: Starting!'
       end
 
       def next_player_color
@@ -72,13 +71,34 @@ module Us
         @map.init_stars_for(player: player)
       end
 
+      def fetch_for(player_id:)
+        {
+          state: @state,
+          clock: @clock.client_resp,
+          stars: fetch_stars_for(player_id: player_id),
+          players: fetch_players_for(player_id: player_id)
+        }.to_json
+      end
+
       def to_json
         {
           state: @state,
           clock: @clock.client_resp,
-          stars: @map.stars.map(&:client_resp),
-          players: @players.map(&:client_resp)
+          stars: [],
+          players: []
         }.to_json
+      end
+
+      def fetch_stars_for(player_id:)
+        @map.stars.map do |s|
+          s.owned_by?(player_id: player_id) ? s.full_resp : s.basic_resp
+        end
+      end
+
+      def fetch_players_for(player_id:)
+        @players.map do |p|
+          p.id == player_id ? p.full_resp : p.basic_resp
+        end
       end
     end
   end

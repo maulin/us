@@ -10,6 +10,8 @@ module Us
     end
 
     def self.start
+      $stdout.sync
+
       pid = fork do
         Process.setproctitle("us-game-server")
         puts "SERVER: Starting server process"
@@ -24,6 +26,7 @@ module Us
           exit 0
         end
         server.mount '/game', GameServelet
+        server.mount '/game_orders', GameOrders
         server.mount '/players', PlayersServelet
         server.start
       end
@@ -47,10 +50,13 @@ module Us
         res['Content-Type'] = 'Application/Json'
         res.body = game.to_json
       end
+    end
 
-      def do_GET(req, res)
+    class GameOrders < WEBrick::HTTPServlet::AbstractServlet
+      def do_POST(req, res)
+        params = JSON.parse(req.body)
         res['Content-Type'] = 'Application/Json'
-        res.body = Server.game.to_json
+        res.body = Server.game.fetch_for(player_id: params['player_id'])
       end
     end
 
@@ -60,12 +66,14 @@ module Us
         return unless game
 
         params = JSON.parse(req.body)
+        res['Content-Type'] = 'Application/Json'
+
+        player = {}
         if !game.player?(id: params['id'])
-          game.add_player(name: params['name'])
+          player = game.add_player(name: params['name'])
         end
 
-        res['Content-Type'] = 'Application/Json'
-        res.body = game.to_json
+        res.body = player.to_json
       end
     end
   end

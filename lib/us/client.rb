@@ -17,8 +17,12 @@ module Us
       http.post('/game', '')
     end
 
-    def update_game
-      http.get('/game')
+    def update_game(body)
+      http.post(
+        '/game_orders',
+        body.to_json,
+        'Content-Type' => 'application/json'
+      )
     end
 
     def join_game(body)
