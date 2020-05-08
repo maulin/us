@@ -56,7 +56,7 @@ module Us
       def star_location_valid?(location)
         @stars.all? do |s|
           magnitude = Vector.new(s.pos, location).magnitude
-          magnitude > s.width
+          magnitude > Star::SIZE * 2
         end
       end
 

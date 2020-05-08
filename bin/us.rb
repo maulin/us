@@ -13,5 +13,5 @@ Process.setproctitle("us-game")
 Us.try_load_user
 game_window = Us::GameWindow.new
 G.window = game_window
-G.camera = Us::Camera.new(game_window.width, game_window.height)
+G.camera = Us::Camera.new
 game_window.show

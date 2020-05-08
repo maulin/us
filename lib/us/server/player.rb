@@ -3,10 +3,11 @@ module Us
     class Player
       COLORS = [:p_blue, :p_orange]
 
-      attr_reader :id, :name, :color
+      attr_reader :id, :name, :color, :manufacturing
 
       def initialize(id:, name:, color:)
         @researching = 'weapons'
+        @manufacturing = 1
         @id = id
         @name = name
         @color = color
