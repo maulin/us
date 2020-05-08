@@ -3,23 +3,22 @@ require_relative './point'
 module Us
   class Camera
     ZOOM_MAX = 2
-    ZOOM_MIN = 1
+    ZOOM_MIN = 0.5
+    ZOOM_NORM = 1
     ZOOM_INTERVAL = 0.2
     SPEED = 15
 
     attr_reader :pos, :zoom
 
-    def initialize(width, height)
-      @zoom = ZOOM_MIN
+    def initialize
+      @zoom = ZOOM_NORM
       @pos = Point.new(0, 0)
-      @width = width
-      @height = height
     end
 
     def reset
       @pos.x = 0
       @pos.y = 0
-      @zoom = ZOOM_MIN
+      @zoom = ZOOM_NORM
     end
 
     def move_left

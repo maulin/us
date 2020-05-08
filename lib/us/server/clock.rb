@@ -1,16 +1,16 @@
 module Us
   module Server
     class Clock
-      TICK_INTERVAL = 10
-      PROD_TICKS = 2
-      PROD_INTERVAL = TICK_INTERVAL * PROD_TICKS
+      TICK_INTERVAL = 15
+      CYCLE_TICKS = 4
 
       attr_reader :ticks, :tick_start_time
 
       def initialize
         @ticks = 0
+        @cycles = 0
         @tick_start_time = 0
-        @prod_interval = PROD_INTERVAL
+        @tick_interval = TICK_INTERVAL
       end
 
       def start
@@ -23,23 +23,31 @@ module Us
       end
 
       def tick
-        @prod_interval -= 1
+        @tick_interval -= 1
         puts self
         sleep 1
       end
 
-      def produce?
-        @prod_interval == 0
+      def tick_complete?
+        @tick_interval == 0
       end
 
-      def increment
+      def cycle_complete?
+        @ticks % CYCLE_TICKS == 0
+      end
+
+      def increment_tick
         @ticks += 1
         @tick_start_time = current_time
-        @prod_interval = PROD_INTERVAL
+        @tick_interval = TICK_INTERVAL
+      end
+
+      def increment_cycle
+        @cycles += 1
       end
 
       def to_s
-        "CLOCK: #{@ticks} - #{@prod_interval}"
+        "CLOCK: #{@cycles} - #{@ticks}"
       end
 
       def client_resp

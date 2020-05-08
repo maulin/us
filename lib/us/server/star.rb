@@ -6,6 +6,7 @@ module Us
       attr_reader :pos, :name
 
       def initialize(pos:, name:, owner:)
+        @industry = 1
         @ships = 0
         @pos = pos
         @name = name
@@ -13,16 +14,18 @@ module Us
         puts "GAME: #{self} created"
       end
 
+      def build_ships
+        return if @industry == 0
+        new_ships = ((@industry * (@owner.manufacturing + 5)) / Clock::CYCLE_TICKS.to_f).round(2)
+        @ships += new_ships
+      end
+
+      def ships
+        @ships.floor
+      end
+
       def to_s
         "STAR: #{@name}, POS: #{pos}"
-      end
-
-      def width
-        SIZE * 2
-      end
-
-      def height
-        SIZE * 2
       end
 
       def owned_by?(player_id:)
@@ -31,7 +34,7 @@ module Us
 
       def full_resp
         basic_resp.merge({
-          sh: @ships
+          ships: ships
         })
       end
 

@@ -9,6 +9,7 @@ module G
   }
 
   FONT_SIZES = {
+    :tiny => Gosu::Font.new(15, name: 'Fira Mono'),
     :small => Gosu::Font.new(25, name: 'Fira Mono'),
     :medium => Gosu::Font.new(35, name: 'Fira Mono'),
     :large => Gosu::Font.new(45, name: 'Fira Mono')

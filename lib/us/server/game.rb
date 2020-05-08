@@ -7,7 +7,7 @@ module Us
     class Game
       START_STARS = 6
       START_STARS_MAX_DISTANCE = 150
-      MAX_PLAYERS = 2
+      MAX_PLAYERS = 1
 
       def initialize
         @clock = Clock.new
@@ -22,16 +22,21 @@ module Us
         loop do
           if @state == :started
             @clock.tick
-            if @clock.produce?
-              production
-              @clock.increment
+            if @clock.tick_complete?
+              puts "TICK COMPLETE"
+              build_ships_at_stars
+              @clock.increment_tick
+              if @clock.cycle_complete?
+                puts "GALACTIC CYCLE COMPLETE"
+                @clock.increment_cycle
+              end
             end
           end
         end
       end
 
-      def production
-        puts 'GAME: production cycle complete'
+      def build_ships_at_stars
+        @map.stars.each(&:build_ships)
       end
 
       def game_full?

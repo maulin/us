@@ -19,6 +19,7 @@ module Us
       @hud.draw
       G.draw_with_camera do
         @stars.each do |s|
+          s.draw
           @star.draw(s.pos.x, s.pos.y, 10)
           s.owner.ring.draw(s.pos.x, s.pos.y, 10)
         end
@@ -40,7 +41,7 @@ module Us
     def clock
       if @state == :started
         time_since_last_tick = Time.now.utc.to_i - @tick_start_time
-        "#{Gosu.fps} Production: #{Us::Server::Clock::PROD_INTERVAL - time_since_last_tick}s"
+        "#{Gosu.fps} Production: #{Us::Server::Clock::TICK_INTERVAL - time_since_last_tick}s"
       else
         "#{Gosu.fps} Unstarted"
       end
@@ -49,7 +50,7 @@ module Us
     def update
       return unless @state == :started
       current_time = Time.now.utc.to_i
-      if current_time - @tick_start_time > Us::Server::Clock::PROD_INTERVAL && current_time - @last_update > 1
+      if current_time - @tick_start_time > Us::Server::Clock::TICK_INTERVAL && current_time - @last_update > 1
         Us.update_game
       end
     end
