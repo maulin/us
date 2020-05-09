@@ -6,6 +6,7 @@ module Us
       attr_reader :id, :name, :color, :manufacturing
 
       def initialize(id:, name:, color:)
+        @credits = Game::START_CREDITS
         @researching = 'weapons'
         @manufacturing = 1
         @id = id
@@ -20,7 +21,8 @@ module Us
 
       def full_resp
         basic_resp.merge({
-          researching: @researching
+          researching: @researching,
+          credits: @credits
         })
       end
 

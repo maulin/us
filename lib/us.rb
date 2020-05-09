@@ -48,9 +48,9 @@ module Us
     update_game
   end
 
-  def self.update_game
+  def self.update_game(order: {})
     id = @store.transaction(true) { @store.fetch('game.player_id', nil) }
-    body = { player_id: id }
+    body = order.merge({ player_id: id })
     game_data = JSON.parse(@client.update_game(body).body)
     @game ? @game.update_objects(game_data) : @game = Game.new(data: game_data)
   end

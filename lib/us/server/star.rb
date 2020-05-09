@@ -2,15 +2,18 @@ module Us
   module Server
     class Star
       SIZE = 25
+      CHARS = ('A'..'Z').to_a
 
-      attr_reader :pos, :name
+      attr_reader :id, :pos, :name, :owner, :carrier_count
 
-      def initialize(pos:, name:, owner:)
+      def initialize(pos:, owner:)
+        @id = Server.game.next_star_id
         @industry = 1
         @ships = 0
         @pos = pos
-        @name = name
+        @name = CHARS.sample(4).join
         @owner = owner
+        @carrier_count = 0
         puts "GAME: #{self} created"
       end
 
@@ -20,12 +23,17 @@ module Us
         @ships += new_ships
       end
 
+      def build_carrier
+        Server.game.carriers << Carrier.new(star: self)
+        carrier_count += 1
+      end
+
       def ships
         @ships.floor
       end
 
       def to_s
-        "STAR: #{@name}, POS: #{pos}"
+        "STAR: #{name}, POS: #{pos}"
       end
 
       def owned_by?(player_id:)
@@ -40,12 +48,13 @@ module Us
 
       def basic_resp
         {
+          id: @id,
           x: pos.x - SIZE,
           y: pos.y - SIZE,
           cx: pos.x,
           cy: pos.y,
           name: name,
-          owner: @owner.id,
+          owner: @owner.id
         }
       end
     end

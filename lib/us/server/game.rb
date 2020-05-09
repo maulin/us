@@ -7,12 +7,17 @@ module Us
     class Game
       START_STARS = 6
       START_STARS_MAX_DISTANCE = 150
+      START_CREDITS = 500
+      CARRIER_COST = 500
       MAX_PLAYERS = 1
+
+      attr_accessor :carriers
 
       def initialize
         @clock = Clock.new
         @players = []
         @map = Map.new
+        @carriers = []
         @state = :unstarted
 
         puts "GAME: game #{@id} initialized"
@@ -68,6 +73,10 @@ module Us
         (Player::COLORS - @players.map(&:color)).sample
       end
 
+      def next_star_id
+        @map.stars.count + 1
+      end
+
       def next_player_id
         @players.count + 1
       end
@@ -76,10 +85,15 @@ module Us
         @map.init_stars_for(player: player)
       end
 
+      def fetch_star(id:)
+        @map.stars.find { |s| s.id == id }
+      end
+
       def fetch_for(player_id:)
         {
           state: @state,
           clock: @clock.client_resp,
+          carriers: carriers.map(&:client_resp),
           stars: fetch_stars_for(player_id: player_id),
           players: fetch_players_for(player_id: player_id)
         }.to_json
@@ -103,6 +117,16 @@ module Us
       def fetch_players_for(player_id:)
         @players.map do |p|
           p.id == player_id ? p.full_resp : p.basic_resp
+        end
+      end
+
+      def execute_order(order: order)
+        star = fetch_star(id: order['object_id'])
+        return unless star
+
+        case order['order']
+        when 'carrier'
+          star.build_carrier
         end
       end
     end

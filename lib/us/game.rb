@@ -1,15 +1,18 @@
 require_relative 'player'
 require_relative 'star'
 require_relative './menu/hud'
+require_relative './menu/star'
 
 module Us
   class Game
     attr_accessor :players
+    attr_reader :star_menu
 
     def initialize(data:)
       @ring = Gosu::Image.new(File.expand_path('./assets/orange.png'))
       @star = Gosu::Image.new(File.expand_path('./assets/visible_star.png'))
       @hud = Menu::Hud.new(self)
+      @star_menu = Menu::Star.new
       @ticks = -1
 
       update_objects(data)
@@ -17,6 +20,7 @@ module Us
 
     def draw
       @hud.draw
+      @star_menu.draw
       G.draw_with_camera do
         @stars.each do |s|
           s.draw
@@ -56,9 +60,16 @@ module Us
     end
 
     def handle_click(pos)
-      @hud.handle_click(pos)
-      pos = G.unzoom_and_translate(pos)
-      @stars.each { |s| s.handle_click(pos) }
+      if @hud.clicked?(pos)
+        @star_menu.hide
+        @hud.handle_click(pos)
+      elsif @star_menu.clicked?(pos)
+        @star_menu.handle_click(pos)
+      else
+        @star_menu.hide
+        pos = G.unzoom_and_translate(pos)
+        @stars.each { |s| s.handle_click(pos) }
+      end
     end
   end
 end

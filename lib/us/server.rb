@@ -53,8 +53,15 @@ module Us
     class GameOrders < WEBrick::HTTPServlet::AbstractServlet
       def do_POST(req, res)
         params = JSON.parse(req.body)
+        puts params
         res['Content-Type'] = 'Application/Json'
-        res.body = Server.game.fetch_for(player_id: params['player_id'])
+
+        if params['order_object']
+          res.status = 200 if Server.game.execute_order(order: params)
+        else
+          res.body = Server.game.fetch_for(player_id: params['player_id'])
+          res.status = 200
+        end
       end
     end
 
