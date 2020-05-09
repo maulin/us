@@ -1,5 +1,6 @@
 require_relative 'player'
 require_relative 'star'
+require_relative 'carrier'
 require_relative './menu/hud'
 require_relative './menu/star'
 
@@ -9,8 +10,8 @@ module Us
     attr_reader :star_menu
 
     def initialize(data:)
-      @ring = Gosu::Image.new(File.expand_path('./assets/orange.png'))
-      @star = Gosu::Image.new(File.expand_path('./assets/visible_star.png'))
+      @img_star = Gosu::Image.new(File.expand_path('./assets/visible_star.png'))
+      @img_carrier = Gosu::Image.new(File.expand_path('./assets/carrier.png'))
       @hud = Menu::Hud.new(self)
       @star_menu = Menu::Star.new
       @ticks = -1
@@ -24,8 +25,13 @@ module Us
       G.draw_with_camera do
         @stars.each do |s|
           s.draw
-          @star.draw(s.pos.x, s.pos.y, 10)
+          @img_star.draw(s.pos.x, s.pos.y, 10)
           s.owner.ring.draw(s.pos.x, s.pos.y, 10)
+        end
+
+        @carriers.each do |c|
+          c.owner.ring.draw(c.pos.x, c.pos.y, 20)
+          @img_carrier.draw(c.pos.x, c.pos.y, 30)
         end
       end
     end
@@ -38,8 +44,13 @@ module Us
 
       @players = data['players'].map { |p| Player.new(data: p) }
       @stars = data['stars'].map { |s| Star.new(data: s, players: @players) }
+      @carriers = data['carriers'].map { |c| Carrier.new(data: c, players: @players) }
 
       @last_update = Time.now.utc.to_i
+    end
+
+    def fetch_player(id:)
+      @players.find { |p| p.id == id }
     end
 
     def clock

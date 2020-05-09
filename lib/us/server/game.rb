@@ -8,7 +8,7 @@ module Us
       START_STARS = 6
       START_STARS_MAX_DISTANCE = 150
       START_CREDITS = 500
-      CARRIER_COST = 500
+      CARRIER_COST = 25
       MAX_PLAYERS = 1
 
       attr_accessor :stars, :carriers
@@ -46,11 +46,19 @@ module Us
         @stars.each(&:build_ships)
       end
 
+      def build_carrier(id:)
+        puts "building carrier"
+        star = fetch_star(id: id)
+        return unless star.owner.can_afford?(cost: CARRIER_COST)
+        carriers << Carrier.new(star: star)
+        star.owner.deduct_credits(cost: CARRIER_COST)
+      end
+
       def game_full?
         @players.size == MAX_PLAYERS
       end
 
-      def player?(id:)
+      def fetch_player(id:)
         @players.find { |p| p.id == id }
       end
 
@@ -98,7 +106,8 @@ module Us
           state: @state,
           clock: @clock.client_resp,
           stars: [],
-          players: []
+          players: [],
+          carriers: []
         }.to_json
       end
 
@@ -114,13 +123,12 @@ module Us
         end
       end
 
-      def execute_order(order: order)
-        star = fetch_star(id: order['object_id'])
-        return unless star
-
-        case order['order']
+      def execute_order(order:)
+        puts "GAME: Executing #{order}"
+        order, id = order
+        case order
         when 'carrier'
-          star.build_carrier
+          build_carrier(id: id)
         end
       end
     end

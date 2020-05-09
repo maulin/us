@@ -15,6 +15,15 @@ module Us
         puts "GAME: #{self} created"
       end
 
+      def can_afford?(cost:)
+        @credits >= cost
+      end
+
+      def deduct_credits(cost:)
+        puts "deducting #{cost}"
+        @credits -= cost
+      end
+
       def to_s
         "PLAYER: #{@name} - #{@color}"
       end

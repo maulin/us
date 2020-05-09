@@ -16,7 +16,7 @@ module Us
 
     def build_carrier
       return unless owner.credits >= Server::Game::CARRIER_COST
-      Us.update_game(order: { order_object: self.class.name, object_id: @id, order: 'carrier' })
+      Us.update_game(params: { order: ['carrier', @id] })
     end
 
     def handle_click(pos)

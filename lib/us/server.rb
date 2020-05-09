@@ -56,8 +56,8 @@ module Us
         puts params
         res['Content-Type'] = 'Application/Json'
 
-        if params['order_object']
-          res.status = 200 if Server.game.execute_order(order: params)
+        if params['order']
+          res.status = 200 if Server.game.execute_order(order: params['order'])
           res.body = Server.game.fetch_for(player_id: params['player_id'])
         else
           res.body = Server.game.fetch_for(player_id: params['player_id'])
@@ -74,7 +74,7 @@ module Us
         params = JSON.parse(req.body)
         res['Content-Type'] = 'Application/Json'
 
-        player = game.player?(id: params['id'])
+        player = game.fetch_player(id: params['id'])
         if !player
           player = game.add_player(name: params['name'])
         end

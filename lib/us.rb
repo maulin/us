@@ -13,11 +13,16 @@ module Us
   @client ||= Client.new
 
   class << self
-    attr_reader :current_user, :game
+    attr_reader :current_user, :game, :current_player
   end
 
   def self.gen_id
     SecureRandom.hex(10)
+  end
+
+  def self.current_player
+    id = @store.transaction(true) { @store.fetch('game.player_id', nil) }
+    @current_player = game.fetch_player(id: id)
   end
 
   def self.try_load_user
@@ -53,10 +58,10 @@ module Us
     update_game
   end
 
-  def self.update_game(order: {})
+  def self.update_game(params: {})
     id = @store.transaction(true) { @store.fetch('game.player_id', nil) }
-    body = order.merge({ player_id: id })
-    game_data = JSON.parse(@client.update_game(body).body)
+    params = params.merge({ player_id: id })
+    game_data = JSON.parse(@client.update_game(params).body)
     @game ? @game.update_objects(game_data) : @game = Game.new(data: game_data)
   end
 end

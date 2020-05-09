@@ -43,9 +43,8 @@ module Us
 
       def draw_clock
         G.draw_quad(quad: @clock_quad, color: :blue_dark, z: 100)
-        G.draw_text(
-          text: @game.clock, pos: Point.new(150, 10), z: 100, size: :small
-        )
+        text = "Credits $#{Us.current_player.credits} #{@game.clock}"
+        G.draw_text(text: text, pos: Point.new(50, 10), z: 100, size: :small)
       end
 
       def draw_players

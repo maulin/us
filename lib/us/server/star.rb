@@ -4,7 +4,7 @@ module Us
       SIZE = 25
       CHARS = ('A'..'Z').to_a
 
-      attr_reader :id, :pos, :name, :owner, :carrier_count
+      attr_reader :id, :pos, :name, :owner
 
       def initialize(pos:, owner:)
         @id = Us.gen_id
@@ -13,7 +13,6 @@ module Us
         @owner = owner
         @industry = 1
         @ships = 0
-        @carrier_count = 0
         puts "GAME: #{self} created"
       end
 
@@ -23,17 +22,12 @@ module Us
         @ships += new_ships
       end
 
-      def build_carrier
-        Server.game.carriers << Carrier.new(star: self)
-        @carrier_count += 1
-      end
-
       def ships
         @ships.floor
       end
 
       def to_s
-        "STAR: #{name}, POS: #{pos}"
+        "STAR: #{id} #{name}, POS: #{pos}"
       end
 
       def owned_by?(player_id:)
