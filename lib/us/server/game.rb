@@ -11,11 +11,13 @@ module Us
       CARRIER_COST = 500
       MAX_PLAYERS = 1
 
-      attr_accessor :carriers
+      attr_accessor :stars, :carriers
 
       def initialize
+        @id = Us.gen_id
         @clock = Clock.new
         @players = []
+        @stars = []
         @map = Map.new
         @carriers = []
         @state = :unstarted
@@ -41,7 +43,7 @@ module Us
       end
 
       def build_ships_at_stars
-        @map.stars.each(&:build_ships)
+        @stars.each(&:build_ships)
       end
 
       def game_full?
@@ -55,8 +57,7 @@ module Us
       def add_player(name:)
         return if game_full?
 
-        player_id = @players.count + 1
-        player = Player.new(id: next_player_id, name: name, color: next_player_color)
+        player = Player.new(name: name, color: next_player_color)
         @players << player
         init_stars_for(player: player)
         start if game_full?
@@ -71,14 +72,6 @@ module Us
 
       def next_player_color
         (Player::COLORS - @players.map(&:color)).sample
-      end
-
-      def next_star_id
-        @map.stars.count + 1
-      end
-
-      def next_player_id
-        @players.count + 1
       end
 
       def init_stars_for(player:)
@@ -101,6 +94,7 @@ module Us
 
       def to_json
         {
+          id: @id,
           state: @state,
           clock: @clock.client_resp,
           stars: [],
@@ -109,7 +103,7 @@ module Us
       end
 
       def fetch_stars_for(player_id:)
-        @map.stars.map do |s|
+        @stars.map do |s|
           s.owned_by?(player_id: player_id) ? s.full_resp : s.basic_resp
         end
       end

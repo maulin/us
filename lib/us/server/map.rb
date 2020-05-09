@@ -13,8 +13,6 @@ module Us
       def initialize
         @width = WIDTH
         @height = HEIGHT
-        @stars = []
-        @carriers = []
       end
 
       def init_stars_for(player:)
@@ -27,7 +25,7 @@ module Us
             star = Star.new(pos: Point.new(x, y), owner: player)
 
             stars << star
-            @stars << star
+            Server.game.stars << star
           else
             star = stars.sample
             new_star_location = star_location_near(star)
@@ -39,7 +37,7 @@ module Us
             new_star = Star.new(pos: new_star_location, owner: player)
 
             stars << new_star
-            @stars << new_star
+            Server.game.stars << new_star
           end
         end
       end
@@ -54,15 +52,10 @@ module Us
       end
 
       def star_location_valid?(location)
-        @stars.all? do |s|
+        Server.game.stars.all? do |s|
           magnitude = Vector.new(s.pos, location).magnitude
           magnitude > Star::SIZE * 2
         end
-      end
-
-      def create_carrier_at(star)
-        name = "#{star.name} - #{@carriers.count + 1}"
-        @carriers << Carrier.new(name, star.pos)
       end
     end
   end

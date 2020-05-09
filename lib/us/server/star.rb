@@ -7,12 +7,12 @@ module Us
       attr_reader :id, :pos, :name, :owner, :carrier_count
 
       def initialize(pos:, owner:)
-        @id = Server.game.next_star_id
-        @industry = 1
-        @ships = 0
+        @id = Us.gen_id
         @pos = pos
         @name = CHARS.sample(4).join
         @owner = owner
+        @industry = 1
+        @ships = 0
         @carrier_count = 0
         puts "GAME: #{self} created"
       end

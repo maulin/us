@@ -5,13 +5,13 @@ module Us
 
       attr_reader :id, :name, :color, :manufacturing
 
-      def initialize(id:, name:, color:)
+      def initialize(name:, color:)
+        @id = Us.gen_id
         @credits = Game::START_CREDITS
-        @researching = 'weapons'
-        @manufacturing = 1
-        @id = id
         @name = name
         @color = color
+        @researching = 'weapons'
+        @manufacturing = 1
         puts "GAME: #{self} created"
       end
 
