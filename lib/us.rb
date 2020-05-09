@@ -1,4 +1,5 @@
 require 'pstore'
+require 'securerandom'
 
 require_relative '../lib/us/server'
 require_relative '../lib/us/client'
@@ -13,6 +14,10 @@ module Us
 
   class << self
     attr_reader :current_user, :game
+  end
+
+  def self.gen_id
+    SecureRandom.hex(10)
   end
 
   def self.try_load_user

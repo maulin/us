@@ -5,10 +5,10 @@ module Us
 
       attr_reader :id, :name, :color, :manufacturing
 
-      def initialize(id:, name:, color:)
+      def initialize(name:, color:)
+        @id = Us.gen_id
         @researching = 'weapons'
         @manufacturing = 1
-        @id = id
         @name = name
         @color = color
         puts "GAME: #{self} created"

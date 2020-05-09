@@ -6,6 +6,7 @@ module Us
       attr_reader :pos, :name
 
       def initialize(pos:, name:, owner:)
+        @id = Us.gen_id
         @industry = 1
         @ships = 0
         @pos = pos
@@ -40,6 +41,7 @@ module Us
 
       def basic_resp
         {
+          id: @id,
           x: pos.x - SIZE,
           y: pos.y - SIZE,
           cx: pos.x,
