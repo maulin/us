@@ -27,7 +27,7 @@ module Us
     end
 
     def to_s
-      "#{@id} - #{name}, POS: #{pos}"
+      "#{name}, POS: #{pos}"
     end
 
     def draw

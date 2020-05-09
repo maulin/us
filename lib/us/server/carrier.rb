@@ -11,8 +11,8 @@ module Us
 
       def client_resp
         {
-          x: pos.x,
-          y: pos.y,
+          x: @pos.x,
+          y: @pos.y,
           name: @name,
           owner: @owner.id
         }

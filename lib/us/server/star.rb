@@ -25,7 +25,7 @@ module Us
 
       def build_carrier
         Server.game.carriers << Carrier.new(star: self)
-        carrier_count += 1
+        @carrier_count += 1
       end
 
       def ships

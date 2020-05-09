@@ -79,7 +79,7 @@ module Us
       end
 
       def fetch_star(id:)
-        @map.stars.find { |s| s.id == id }
+        @stars.find { |s| s.id == id }
       end
 
       def fetch_for(player_id:)

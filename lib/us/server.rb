@@ -58,6 +58,7 @@ module Us
 
         if params['order_object']
           res.status = 200 if Server.game.execute_order(order: params)
+          res.body = Server.game.fetch_for(player_id: params['player_id'])
         else
           res.body = Server.game.fetch_for(player_id: params['player_id'])
           res.status = 200
