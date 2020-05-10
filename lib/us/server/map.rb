@@ -22,7 +22,7 @@ module Us
           if stars.empty?
             x = rand(Star::SIZE..(@width - Star::SIZE))
             y = rand(Star::SIZE..(@height - Star::SIZE))
-            star = Star.new(pos: Point.new(x, y), name: i, owner: player)
+            star = Star.new(pos: Point.new(x, y), owner: player)
 
             stars << star
             Server.game.stars << star
@@ -34,7 +34,7 @@ module Us
               new_star_location = star_location_near(star)
             end
 
-            new_star = Star.new(pos: new_star_location, name: i, owner: player)
+            new_star = Star.new(pos: new_star_location, owner: player)
 
             stars << new_star
             Server.game.stars << new_star

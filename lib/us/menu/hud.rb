@@ -3,8 +3,9 @@ require_relative '../point'
 
 module Us
   module Menu
+    WIDTH = Us::WIDTH * 0.20
+
     class Hud
-      WIDTH = Us::WIDTH * 0.20
       CLOCK_H = 50
       PLAYER_H = 50
 
@@ -41,10 +42,9 @@ module Us
       end
 
       def draw_clock
-        G.draw_quad(quad: @clock_quad, color: :blue_dark, z: 10)
-        G.draw_text(
-          text: @game.clock, pos: Point.new(150, 10), z: 100, size: :small
-        )
+        G.draw_quad(quad: @clock_quad, color: :blue_dark, z: 100)
+        text = "Credits $#{Us.current_player.credits} #{@game.clock}"
+        G.draw_text(text: text, pos: Point.new(50, 10), z: 100, size: :small)
       end
 
       def draw_players
@@ -52,17 +52,21 @@ module Us
         Server::Game::MAX_PLAYERS.times do |i|
           player = @game.players[i]
           if player
-            G.draw_quad(quad: @player_quads[i], color: player.color, z: 10)
+            G.draw_quad(quad: @player_quads[i], color: player.color, z: 100)
             G.draw_text(
-              text: player.name[0], pos: Point.new(@avatar_width * i + offset, CLOCK_H), z: 20, size: :large
+              text: player.name[0], pos: Point.new(@avatar_width * i + offset, CLOCK_H), z: 100, size: :large
             )
           else
-            G.draw_quad(quad: @player_quads[i], color: :gray, z: 10)
+            G.draw_quad(quad: @player_quads[i], color: :gray, z: 100)
             G.draw_text(
-              text: "?", pos: Point.new(@avatar_width * i + offset, CLOCK_H), z: 20, size: :large
+              text: "?", pos: Point.new(@avatar_width * i + offset, CLOCK_H), z: 100, size: :large
             )
           end
         end
+      end
+
+      def clicked?(pos)
+        @clock_quad.contains?(pos) || @player_quads.any? { |p| p.contains?(pos) }
       end
 
       def handle_click(pos)

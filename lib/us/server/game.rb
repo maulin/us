@@ -7,9 +7,11 @@ module Us
     class Game
       START_STARS = 6
       START_STARS_MAX_DISTANCE = 150
+      START_CREDITS = 500
+      CARRIER_COST = 25
       MAX_PLAYERS = 1
 
-      attr_accessor :stars
+      attr_accessor :stars, :carriers
 
       def initialize
         @id = Us.gen_id
@@ -17,6 +19,7 @@ module Us
         @players = []
         @stars = []
         @map = Map.new
+        @carriers = []
         @state = :unstarted
 
         puts "GAME: game #{@id} initialized"
@@ -43,11 +46,18 @@ module Us
         @stars.each(&:build_ships)
       end
 
+      def build_carrier(id:)
+        star = fetch_star(id: id)
+        return unless star.owner.can_afford?(cost: CARRIER_COST)
+        carriers << Carrier.new(star: star)
+        star.owner.deduct_credits(cost: CARRIER_COST)
+      end
+
       def game_full?
         @players.size == MAX_PLAYERS
       end
 
-      def player?(id:)
+      def fetch_player(id:)
         @players.find { |p| p.id == id }
       end
 
@@ -75,10 +85,15 @@ module Us
         @map.init_stars_for(player: player)
       end
 
+      def fetch_star(id:)
+        @stars.find { |s| s.id == id }
+      end
+
       def fetch_for(player_id:)
         {
           state: @state,
           clock: @clock.client_resp,
+          carriers: carriers.map(&:client_resp),
           stars: fetch_stars_for(player_id: player_id),
           players: fetch_players_for(player_id: player_id)
         }.to_json
@@ -90,7 +105,8 @@ module Us
           state: @state,
           clock: @clock.client_resp,
           stars: [],
-          players: []
+          players: [],
+          carriers: []
         }.to_json
       end
 
@@ -103,6 +119,15 @@ module Us
       def fetch_players_for(player_id:)
         @players.map do |p|
           p.id == player_id ? p.full_resp : p.basic_resp
+        end
+      end
+
+      def execute_order(order:)
+        puts "GAME: Executing #{order}"
+        order, id = order
+        case order
+        when 'carrier'
+          build_carrier(id: id)
         end
       end
     end

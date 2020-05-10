@@ -54,6 +54,8 @@ module Us
       def do_POST(req, res)
         params = JSON.parse(req.body)
         res['Content-Type'] = 'Application/Json'
+
+        Server.game.execute_order(order: params['order']) if params['order']
         res.body = Server.game.fetch_for(player_id: params['player_id'])
       end
     end
@@ -66,7 +68,7 @@ module Us
         params = JSON.parse(req.body)
         res['Content-Type'] = 'Application/Json'
 
-        player = game.player?(id: params['id'])
+        player = game.fetch_player(id: params['id'])
         if !player
           player = game.add_player(name: params['name'])
         end

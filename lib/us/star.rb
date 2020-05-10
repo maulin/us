@@ -5,6 +5,7 @@ module Us
     attr_reader :name, :pos, :owner
 
     def initialize(data:, players:)
+      @id = data['id']
       @name = data['name']
       @pos = Point.new(data['x'], data['y'])
       @center = Point.new(data['cx'], data['cy'])
@@ -13,9 +14,20 @@ module Us
       @bottom_middle = Point.new(@center.x, @center.y + SIZE + 5)
     end
 
+    def build_carrier
+      return unless owner.credits >= Server::Game::CARRIER_COST
+      Us.update_game(params: { order: ['carrier', @id] })
+    end
+
     def handle_click(pos)
       vec = Vector.new(@center, pos)
-      puts "STAR CLICKED!" if vec.magnitude < SIZE
+      if vec.magnitude < SIZE
+        Us.game.star_menu.show(star: self)
+      end
+    end
+
+    def to_s
+      "#{name}, POS: #{pos}"
     end
 
     def draw

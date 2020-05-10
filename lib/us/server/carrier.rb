@@ -3,26 +3,25 @@ require_relative '../vector'
 module Us
   module Server
     class Carrier
-      def initialize(name, pos)
-        @name = name
-        @pos = pos
+      SIZE = 25
+
+      def initialize(star: self)
+        @id = Us.gen_id
+        @name = "#{star.name} - carrier"
+        @pos = star.pos
+        @owner = star.owner
       end
 
-      def travel(quad)
-        @dest = quad
-        @dest_vec = Vector.new(@pos, @dest.center)
-      end
-
-      def move
-        return unless @dest
-
-        @pos.x += (@dest_vec.heading.x * Map::LY)
-        @pos.y += (@dest_vec.heading.y * Map::LY)
-
-        if @dest.contains?(@pos)
-          @pos = @dest.center
-          @dest = nil
-        end
+      def client_resp
+        {
+          id: @id,
+          x: @pos.x - SIZE,
+          y: @pos.y - SIZE,
+          cx: @pos.x,
+          cy: @pos.y,
+          name: @name,
+          owner: @owner.id
+        }
       end
     end
   end

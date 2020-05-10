@@ -7,11 +7,21 @@ module Us
 
       def initialize(name:, color:)
         @id = Us.gen_id
-        @researching = 'weapons'
-        @manufacturing = 1
+        @credits = Game::START_CREDITS
         @name = name
         @color = color
+        @researching = 'weapons'
+        @manufacturing = 1
         puts "GAME: #{self} created"
+      end
+
+      def can_afford?(cost:)
+        @credits >= cost
+      end
+
+      def deduct_credits(cost:)
+        puts "deducting #{cost}"
+        @credits -= cost
       end
 
       def to_s
@@ -20,7 +30,8 @@ module Us
 
       def full_resp
         basic_resp.merge({
-          researching: @researching
+          researching: @researching,
+          credits: @credits
         })
       end
 

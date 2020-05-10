@@ -2,16 +2,17 @@ module Us
   module Server
     class Star
       SIZE = 25
+      CHARS = ('A'..'Z').to_a
 
-      attr_reader :pos, :name
+      attr_reader :id, :pos, :name, :owner
 
-      def initialize(pos:, name:, owner:)
+      def initialize(pos:, owner:)
         @id = Us.gen_id
+        @pos = pos
+        @name = CHARS.sample(4).join
+        @owner = owner
         @industry = 1
         @ships = 0
-        @pos = pos
-        @name = name
-        @owner = owner
         puts "GAME: #{self} created"
       end
 
@@ -26,7 +27,7 @@ module Us
       end
 
       def to_s
-        "STAR: #{@name}, POS: #{pos}"
+        "STAR: #{id} #{name}, POS: #{pos}"
       end
 
       def owned_by?(player_id:)
@@ -47,7 +48,7 @@ module Us
           cx: pos.x,
           cy: pos.y,
           name: name,
-          owner: @owner.id,
+          owner: @owner.id
         }
       end
     end

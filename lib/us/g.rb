@@ -1,6 +1,7 @@
 module G
   COLORS = {
     :blue_dark => Gosu::Color.new(26,28,68),
+    :blue_middle => Gosu::Color.new(44,50,115),
     :blue_light => Gosu::Color.new(89,97,187),
     :gray => Gosu::Color::GRAY,
     :p_blue => Gosu::Color::BLUE,
