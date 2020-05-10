@@ -47,7 +47,6 @@ module Us
       end
 
       def build_carrier(id:)
-        puts "building carrier"
         star = fetch_star(id: id)
         return unless star.owner.can_afford?(cost: CARRIER_COST)
         carriers << Carrier.new(star: star)
