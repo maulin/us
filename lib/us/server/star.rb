@@ -1,7 +1,6 @@
 module Us
   module Server
     class Star
-      SIZE = 25
       CHARS = ('A'..'Z').to_a
 
       attr_reader :id, :pos, :name, :owner
@@ -43,8 +42,6 @@ module Us
       def basic_resp
         {
           id: @id,
-          x: pos.x - SIZE,
-          y: pos.y - SIZE,
           cx: pos.x,
           cy: pos.y,
           name: name,
