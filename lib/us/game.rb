@@ -78,7 +78,7 @@ module Us
         @star_menu.handle_click(pos)
       else
         @star_menu.hide
-        pos = G.unzoom_and_translate(pos)
+        pos = G.untranslate_and_zoom(pos)
         @stars.each { |s| s.handle_click(pos) }
       end
     end

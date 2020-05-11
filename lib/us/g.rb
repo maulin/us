@@ -1,3 +1,5 @@
+require_relative './vector'
+
 module G
   COLORS = {
     :blue_dark => Gosu::Color.new(26,28,68),
@@ -20,15 +22,18 @@ module G
     attr_accessor :window, :camera
   end
 
-  def self.unzoom_and_translate(pos)
-    pos.x = (pos.x / camera.zoom) - camera.pos.x
-    pos.y = (pos.y / camera.zoom) - camera.pos.y
+  def self.untranslate_and_zoom(pos)
+    pos.x -=  camera.pos.x
+    pos.y -=  camera.pos.y
+    v = Us::Vector.new(pos, camera.center)
+    pos.x = camera.center.x - v.x / camera.zoom
+    pos.y = camera.center.y - v.y / camera.zoom
     pos
   end
 
   def self.draw_with_camera
-    window.scale(camera.zoom) do
-      window.translate(camera.pos.x, camera.pos.y) do
+    window.translate(camera.pos.x, camera.pos.y) do
+      window.scale(camera.zoom, camera.zoom, camera.center.x, camera.center.y) do
         yield
       end
     end

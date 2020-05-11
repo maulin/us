@@ -7,6 +7,7 @@ module Us
     class Map
       WIDTH = 2560
       HEIGHT = 1440
+      LY = 75
 
       attr_reader :stars
 
@@ -20,8 +21,8 @@ module Us
 
         Game::START_STARS.times do |i|
           if stars.empty?
-            x = rand(Star::SIZE..(@width - Star::SIZE))
-            y = rand(Star::SIZE..(@height - Star::SIZE))
+            x = rand(LY..(@width - LY))
+            y = rand(LY..(@height - LY))
             star = Star.new(pos: Point.new(x, y), owner: player)
 
             stars << star
@@ -43,10 +44,10 @@ module Us
       end
 
       def star_location_near(star)
-        distance = rand((Star::SIZE * 2)..Game::START_STARS_MAX_DISTANCE)
+        distance = rand(LY..Game::START_STARS_MAX_DISTANCE)
         angle = rand(0..360)
-        x = star.pos.x + (distance * Math.sin(Math::PI/180 * angle))
-        y = star.pos.y - (distance * Math.cos(Math::PI/180 * angle))
+        x = star.pos.x + Gosu.offset_x(angle, distance)
+        y = star.pos.y - Gosu.offset_y(angle, distance)
 
         Point.new(x, y)
       end
@@ -54,7 +55,7 @@ module Us
       def star_location_valid?(location)
         Server.game.stars.all? do |s|
           magnitude = Vector.new(s.pos, location).magnitude
-          magnitude > Star::SIZE * 2
+          magnitude >= LY
         end
       end
     end

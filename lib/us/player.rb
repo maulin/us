@@ -5,9 +5,15 @@ module Us
     def initialize(data:)
       @id = data['id']
       @name = data['name']
-      @credits = data['credits']
       @color = data['color'].to_sym
       @ring = Gosu::Image.new(File.expand_path("./assets/#{color}.png"))
+      @credits = data['credits']
+      @manufacturing = data['manufacturing']
+      @hyperspace = data['hyperspace']
+    end
+
+    def hyperspace_range
+      @hyperspace * Server::Map::LY * 6
     end
   end
 end

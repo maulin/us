@@ -12,6 +12,7 @@ module Us
         @color = color
         @researching = 'weapons'
         @manufacturing = 1
+        @hyperspace = 1
         puts "GAME: #{self} created"
       end
 
@@ -39,7 +40,9 @@ module Us
         {
           id: id,
           name: name,
-          color: color
+          color: color,
+          manufacturing: @manufacturing,
+          hyperspace: @hyperspace
         }
       end
     end
