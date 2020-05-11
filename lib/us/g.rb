@@ -26,8 +26,8 @@ module G
     pos.x -=  camera.pos.x
     pos.y -=  camera.pos.y
     v = Us::Vector.new(pos, camera.center)
-    pos.x = camera.center.x - v.vec.x / camera.zoom
-    pos.y = camera.center.y - v.vec.y / camera.zoom
+    pos.x = camera.center.x - v.x / camera.zoom
+    pos.y = camera.center.y - v.y / camera.zoom
     pos
   end
 
