@@ -1,13 +1,10 @@
 module Us
-  class Carrier
-    attr_reader :pos, :owner
+  class Carrier < GameObject
+    SPRITE = Gosu::Image.new(File.expand_path('./assets/carrier.png'))
 
-    def initialize(data:, players:)
-      @id = data['id']
-      @name = data['name']
-      @pos = Point.new(data['x'], data['y'])
-      @center = Point.new(data['cx'], data['cy'])
-      @owner = players.find { |p| p.id == data['owner'] }
+    def draw
+      owner.ring.draw(pos.x, pos.y, 20)
+      SPRITE.draw(pos.x, pos.y, 30)
     end
   end
 end

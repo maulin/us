@@ -1,19 +1,19 @@
 require_relative 'player'
+require_relative 'game_object'
 require_relative 'star'
 require_relative 'carrier'
 require_relative './menu/hud'
 require_relative './menu/star'
+require_relative './menu/objects'
 
 module Us
   class Game
     attr_accessor :players
-    attr_reader :star_menu
 
     def initialize(data:)
       @img_star = Gosu::Image.new(File.expand_path('./assets/visible_star.png'))
-      @img_carrier = Gosu::Image.new(File.expand_path('./assets/carrier.png'))
       @hud = Menu::Hud.new(self)
-      @star_menu = Menu::Star.new
+      @menu = Menu::Objects.new
       @ticks = -1
 
       update_objects(data)
@@ -21,18 +21,10 @@ module Us
 
     def draw
       @hud.draw
-      @star_menu.draw
+      @menu.draw
       G.draw_with_camera do
-        @stars.each do |s|
-          s.draw
-          @img_star.draw(s.pos.x, s.pos.y, 10)
-          s.owner.ring.draw(s.pos.x, s.pos.y, 10)
-        end
-
-        @carriers.each do |c|
-          c.owner.ring.draw(c.pos.x, c.pos.y, 20)
-          @img_carrier.draw(c.pos.x, c.pos.y, 30)
-        end
+        @stars.each { |s| s.draw }
+        @carriers.each { |c| c.draw }
       end
     end
 
@@ -72,15 +64,26 @@ module Us
 
     def handle_click(pos)
       if @hud.clicked?(pos)
-        @star_menu.hide
         @hud.handle_click(pos)
-      elsif @star_menu.clicked?(pos)
-        @star_menu.handle_click(pos)
+      elsif @menu.visible? && @menu.clicked?(pos)
+        @menu.handle_click(pos)
       else
-        @star_menu.hide
+        @menu.hide
         pos = G.untranslate_and_zoom(pos)
-        @stars.each { |s| s.handle_click(pos) }
+        objects = game_objects_at(pos)
+        @menu.show(objects)
       end
+    end
+
+    def game_objects_at(pos)
+      objects = []
+      @stars.each do |s|
+        objects << s if s.clicked?(pos)
+      end
+      @carriers.each do |c|
+        objects << c if c.clicked?(pos)
+      end
+      objects
     end
   end
 end

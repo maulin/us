@@ -4,7 +4,7 @@ module Us
       def initialize
         @background = Quad.new(
           Point.new(0, 100), Point.new(WIDTH, 100),
-          Point.new(0, Us::HEIGHT), Point.new(WIDTH, Us::HEIGHT)
+          Point.new(0, HEIGHT), Point.new(WIDTH, HEIGHT)
         )
         @star_name_pos = Point.new(@background.p1.x + 5, @background.p1.y + 10)
         @carrier_quad = Quad.new(
@@ -31,12 +31,16 @@ module Us
         G.draw_text(text: 'Buy a carrier for $25', pos: text_pos, z: 100, size: :small)
       end
 
-      def show(star:)
+      def show(star)
         @star = star
       end
 
       def hide
         @star = nil
+      end
+
+      def visible?
+        @star ? true : false
       end
 
       def clicked?(pos)
