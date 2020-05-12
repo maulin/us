@@ -71,7 +71,7 @@ module Us
         @menu.hide
         pos = G.untranslate_and_zoom(pos)
         objects = game_objects_at(pos)
-        @menu.show(objects) unless objects.empty?
+        @menu.show(objects)
       end
     end
 

@@ -3,6 +3,7 @@ module Us
     SIZE = 25
 
     attr_reader :name, :pos, :owner
+    attr_accessor :selected
 
     def initialize(data:, players:)
       @id = data['id']

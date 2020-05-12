@@ -14,26 +14,19 @@ module Us
         )
       end
 
-      def draw
-        if @object_menu
-          @object_menu.draw
-        else
-          G.draw_quad(quad: @background, color: :blue_dark, z: 100)
-          draw_objects
-        end
-      end
-
       def show(objects)
         return if objects.empty?
-        @objects = objects
 
+        @objects = objects
         if objects.size == 1
           object = objects.first
+          object.selected = true
           @object_menu = MENUS[object.menu_type]
           @object_menu.show(object)
         else
           @object_quads = []
           @objects.each_with_index do |o, i|
+            o.selected = true
             start_height = 100 + (i * (ROW_HEIGHT + ROW_SPACE))
             quad = Quad.new(
               Point.new(0, start_height), Point.new(WIDTH, start_height),
@@ -45,6 +38,7 @@ module Us
       end
 
       def hide
+        @objects.each { |o| o.selected = false } if @objects
         @objects = nil
         @object_quads = nil
         @object_menu = nil
@@ -71,9 +65,18 @@ module Us
         end
       end
 
+      def draw
+        if @object_menu
+          @object_menu.draw
+        else
+          draw_objects
+        end
+      end
+
       def draw_objects
         return unless @object_quads
 
+        G.draw_quad(quad: @background, color: :blue_dark, z: 100)
         @object_quads.each_with_index do |q, i|
           G.draw_quad(quad: q, color: :blue_middle, z: 100)
 

@@ -14,14 +14,6 @@ module Us
       Us.update_game(params: { order: ['carrier', @id] })
     end
 
-    def handle_click(pos)
-      @show_rings = false
-      if clicked?(pos)
-        Us.game.star_menu.show(star: self)
-        @show_rings = true
-      end
-    end
-
     def draw_rings
       r = owner.hyperspace_range
 
@@ -34,7 +26,7 @@ module Us
     end
 
     def draw
-      draw_rings if @show_rings
+      draw_rings if selected
       owner.ring.draw(pos.x, pos.y, 10)
       SPRITE.draw(pos.x, pos.y, 10)
       G.draw_text(text: @ships, pos: @bottom_middle, z: 10, size: :tiny)
