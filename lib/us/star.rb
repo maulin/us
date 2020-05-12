@@ -1,15 +1,9 @@
 module Us
-  class Star
-    SIZE = 25
-
-    attr_reader :name, :pos, :owner
+  class Star < GameObject
+    SPRITE = Gosu::Image.new(File.expand_path('./assets/visible_star.png'))
 
     def initialize(data:, players:)
-      @id = data['id']
-      @name = data['name']
-      @center = Point.new(data['cx'], data['cy'])
-      @pos = Point.new(@center.x - SIZE, @center.y - SIZE)
-      @owner = players.find { |p| p.id == data['owner'] }
+      super
       @ships = data['ships']
       @bottom_middle = Point.new(@center.x, @center.y + SIZE + 5)
       @show_rings = false
@@ -22,8 +16,7 @@ module Us
 
     def handle_click(pos)
       @show_rings = false
-      vec = Vector.new(@center, pos)
-      if vec.magnitude < SIZE
+      if clicked?(pos)
         Us.game.star_menu.show(star: self)
         @show_rings = true
       end
@@ -46,6 +39,8 @@ module Us
 
     def draw
       draw_rings if @show_rings
+      owner.ring.draw(pos.x, pos.y, 10)
+      SPRITE.draw(pos.x, pos.y, 10)
       G.draw_text(text: @ships, pos: @bottom_middle, z: 10, size: :tiny)
     end
   end
