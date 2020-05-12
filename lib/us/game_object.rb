@@ -18,7 +18,7 @@ module Us
     end
 
     def to_s
-      "#{name}, POS: #{pos}"
+      "#{self.class.name.split("::").last}: #{name}"
     end
 
     def menu_type

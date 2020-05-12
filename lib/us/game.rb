@@ -13,10 +13,7 @@ module Us
     def initialize(data:)
       @img_star = Gosu::Image.new(File.expand_path('./assets/visible_star.png'))
       @hud = Menu::Hud.new(self)
-      @menus = {
-        star: Menu::Star.new,
-        objects: Menu::Objects.new
-      }
+      @menu = Menu::Objects.new
       @ticks = -1
 
       update_objects(data)
@@ -24,7 +21,7 @@ module Us
 
     def draw
       @hud.draw
-      visible_menu.draw if visible_menu
+      @menu.draw
       G.draw_with_camera do
         @stars.each { |s| s.draw }
         @carriers.each { |c| c.draw }
@@ -68,28 +65,13 @@ module Us
     def handle_click(pos)
       if @hud.clicked?(pos)
         @hud.handle_click(pos)
-      elsif visible_menu
-        visible_menu.handle_click(pos)
+      elsif @menu.visible? && @menu.clicked?(pos)
+        @menu.handle_click(pos)
       else
-        visible_menu.hide if visible_menu
+        @menu.hide
         pos = G.untranslate_and_zoom(pos)
         objects = game_objects_at(pos)
-        show_menu_for(objects)
-      end
-    end
-
-    def visible_menu
-      menu = @menus.find { |k, v| v.visible? }
-      menu.last if menu
-    end
-
-    def show_menu_for(objects)
-      if objects.count > 1
-        @menus[:objects].show(objects)
-      else
-        object = objects.first
-        menu_type = object.menu_type
-        @menus[menu_type].show(object)
+        @menu.show(objects) unless objects.empty?
       end
     end
 
@@ -99,7 +81,7 @@ module Us
         objects << s if s.clicked?(pos)
       end
       @carriers.each do |c|
-        objects << s if c.clicked?(pos)
+        objects << c if c.clicked?(pos)
       end
       objects
     end

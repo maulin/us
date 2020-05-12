@@ -22,10 +22,6 @@ module Us
       end
     end
 
-    def to_s
-      "#{name}, POS: #{pos}"
-    end
-
     def draw_rings
       r = owner.hyperspace_range
 

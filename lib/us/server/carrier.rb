@@ -7,7 +7,7 @@ module Us
 
       def initialize(star: self)
         @id = Us.gen_id
-        @name = "#{star.name} - carrier"
+        @name = "USS - #{star.name}"
         @pos = star.pos
         @owner = star.owner
       end
