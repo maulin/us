@@ -49,7 +49,7 @@ module Us
       def build_carrier(id:)
         star = fetch_star(id: id)
         return unless star.owner.can_afford?(cost: CARRIER_COST)
-        carriers << Carrier.new(star: star)
+        carriers << Carrier.new(star)
         star.owner.deduct_credits(cost: CARRIER_COST)
       end
 

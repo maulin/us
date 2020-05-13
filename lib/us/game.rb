@@ -3,7 +3,6 @@ require_relative 'game_object'
 require_relative 'star'
 require_relative 'carrier'
 require_relative './menu/hud'
-require_relative './menu/star'
 require_relative './menu/objects'
 
 module Us
@@ -34,15 +33,19 @@ module Us
       @ticks = data['clock']['ticks']
       @tick_start_time = data['clock']['tick_start_time']
 
-      @players = data['players'].map { |p| Player.new(data: p) }
-      @stars = data['stars'].map { |s| Star.new(data: s, players: @players) }
-      @carriers = data['carriers'].map { |c| Carrier.new(data: c, players: @players) }
+      @players = data['players'].map { |p| Player.new(p) }
+      @stars = data['stars'].map { |s| Star.new(data: s, game: self) }
+      @carriers = data['carriers'].map { |c| Carrier.new(data: c, game: self) }
 
       @last_update = Time.now.utc.to_i
     end
 
-    def fetch_player(id:)
+    def fetch_player(id)
       @players.find { |p| p.id == id }
+    end
+
+    def fetch_star(id)
+      @stars.find { |s| s.id == id }
     end
 
     def clock
@@ -84,6 +87,13 @@ module Us
         objects << c if c.clicked?(pos)
       end
       objects
+    end
+
+    def jump_locations_from(star)
+      @stars.select do |s|
+        magnitude = Vector.new(s.pos, star.pos).magnitude
+        magnitude <= Us.current_player.hyperspace_range
+      end
     end
   end
 end

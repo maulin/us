@@ -2,7 +2,7 @@ module Us
   class Player
     attr_reader :id, :name, :color, :ring, :credits
 
-    def initialize(data:)
+    def initialize(data)
       @id = data['id']
       @name = data['name']
       @color = data['color'].to_sym

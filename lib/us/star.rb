@@ -1,8 +1,11 @@
 module Us
   class Star < GameObject
     SPRITE = Gosu::Image.new(File.expand_path('./assets/visible_star.png'))
+    WP_SPRITE = Gosu::Image.new(File.expand_path('./assets/waypoint.png'))
 
-    def initialize(data:, players:)
+    attr_accessor :mark_for_jump
+
+    def initialize(data)
       super
       @ships = data['ships']
       @bottom_middle = Point.new(@center.x, @center.y + SIZE + 5)
@@ -25,8 +28,20 @@ module Us
       end
     end
 
+    def draw_jump_marker
+      WP_SPRITE.draw(pos.x, pos.y, 10)
+    end
+
+    def show_jump_locations
+      selected = true
+      mark_for_jump = true
+      stars = game.jump_locations_from(self)
+      stars.each { |s| s.mark_for_jump = true }
+    end
+
     def draw
       draw_rings if selected
+      draw_jump_marker if mark_for_jump
       owner.ring.draw(pos.x, pos.y, 10)
       SPRITE.draw(pos.x, pos.y, 10)
       G.draw_text(text: @ships, pos: @bottom_middle, z: 10, size: :tiny)
