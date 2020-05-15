@@ -7,12 +7,16 @@ require_relative './menu/objects'
 
 module Us
   class Game
+    MENUS = {
+      star: Menu::Star.new,
+      carrier: Menu::Carrier.new,
+      objects: Menu::Objects.new
+    }
     attr_accessor :players
 
     def initialize(data:)
       @img_star = Gosu::Image.new(File.expand_path('./assets/visible_star.png'))
       @hud = Menu::Hud.new(self)
-      @menu = Menu::Objects.new
       @ticks = -1
 
       update_objects(data)
@@ -20,7 +24,7 @@ module Us
 
     def draw
       @hud.draw
-      @menu.draw
+      @visible_menu.draw if @visible_menu
       G.draw_with_camera do
         @stars.each { |s| s.draw }
         @carriers.each { |c| c.draw }
@@ -65,16 +69,40 @@ module Us
       end
     end
 
+    def close_menu
+      @visible_menu = nil
+    end
+
+    def show_menu_for(object)
+      @visible_menu = MENUS[object.menu_type]
+      @visible_menu.show(object)
+    end
+
     def handle_click(pos)
+      puts "game handle click"
       if @hud.clicked?(pos)
+        puts "hud clicked"
         @hud.handle_click(pos)
-      elsif @menu.visible? && @menu.clicked?(pos)
-        @menu.handle_click(pos)
+      elsif @visible_menu
+        puts "visible menu handle click"
+        @visible_menu.handle_click(pos)
       else
-        @menu.hide
+        puts "finding objects"
         pos = G.untranslate_and_zoom(pos)
         objects = game_objects_at(pos)
-        @menu.show(objects)
+        puts objects
+        return if objects.empty?
+
+        if objects.count > 1
+          puts "showing objects menu"
+          @visible_menu = MENUS[:objects]
+          @visible_menu.show(objects)
+        else
+          object = objects.first
+          puts "showing single object menu"
+          @visible_menu = MENUS[object.menu_type]
+          @visible_menu.show(object)
+        end
       end
     end
 

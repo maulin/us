@@ -9,7 +9,6 @@ module Us
       super
       @ships = data['ships']
       @bottom_middle = Point.new(@center.x, @center.y + SIZE + 5)
-      @show_rings = false
     end
 
     def build_carrier
@@ -17,7 +16,7 @@ module Us
       Us.update_game(params: { order: ['carrier', @id] })
     end
 
-    def draw_rings
+    def draw_hyperspace_ring
       r = owner.hyperspace_range
 
       0.step(360, 10) do |i|
@@ -33,14 +32,13 @@ module Us
     end
 
     def show_jump_locations
-      selected = true
-      mark_for_jump = true
+      self.selected = true
       stars = game.jump_locations_from(self)
       stars.each { |s| s.mark_for_jump = true }
     end
 
     def draw
-      draw_rings if selected
+      draw_hyperspace_ring if selected
       draw_jump_marker if mark_for_jump
       owner.ring.draw(pos.x, pos.y, 10)
       SPRITE.draw(pos.x, pos.y, 10)

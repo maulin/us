@@ -19,65 +19,40 @@ module Us
       end
 
       def show(objects)
-        return if objects.empty?
-
+        @object_quads = []
         @objects = objects
-        if objects.size == 1
-          object = objects.first
-          object.selected = true
-          @object_menu = MENUS[object.menu_type]
-          @object_menu.show(object)
-        else
-          @object_quads = []
-          @objects.each_with_index do |o, i|
-            o.selected = true
-            start_height = 100 + (i * (ROW_HEIGHT + ROW_SPACE))
-            quad = Quad.new(
-              Point.new(0, start_height), Point.new(WIDTH, start_height),
-              Point.new(0, start_height + ROW_HEIGHT), Point.new(WIDTH, start_height + ROW_HEIGHT)
-            )
-            @object_quads << quad
-          end
+
+        @objects.each_with_index do |o, i|
+          start_height = 100 + (i * (ROW_HEIGHT + ROW_SPACE))
+          quad = Quad.new(
+            Point.new(0, start_height), Point.new(WIDTH, start_height),
+            Point.new(0, start_height + ROW_HEIGHT), Point.new(WIDTH, start_height + ROW_HEIGHT)
+          )
+          @object_quads << quad
         end
-      end
-
-      def hide
-        @objects.each { |o| o.selected = false } if @objects
-        @objects = nil
-        @object_quads = nil
-        @object_menu = nil
-      end
-
-      def visible?
-        @objects ? true : false
       end
 
       def clicked?(pos)
         @background.contains?(pos)
       end
 
+      def close_menu_and_rehandle_click(pos)
+        Us.game.close_menu
+        Us.game.handle_click(pos)
+      end
+
       def handle_click(pos)
-        if @object_menu
-          @object_menu.handle_click(pos)
-        else
-          @object_quads.each_with_index do |q, i|
-            if q.contains?(pos)
-              object = @objects[i]
-              show([object])
-            end
+        close_menu_and_rehandle_click(pos) unless clicked?(pos)
+
+        @object_quads.each_with_index do |q, i|
+          if q.contains?(pos)
+            object = @objects[i]
+            Us.game.show_menu_for(object)
           end
         end
       end
 
       def draw
-        if @object_menu
-          @object_menu.draw
-        else
-          draw_objects
-        end
-      end
-
-      def draw_objects
         return unless @object_quads
 
         G.draw_quad(quad: @background, color: :blue_dark, z: 100)

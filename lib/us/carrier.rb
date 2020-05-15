@@ -7,6 +7,7 @@ module Us
     def initialize(data:, game:)
       super
       @start = game.fetch_star(data['start'])
+      @destinations = []
     end
 
     def draw
@@ -14,8 +15,11 @@ module Us
       SPRITE.draw(pos.x, pos.y, 30)
     end
 
-    def show_jump_locations
+    def start_waypointing
       start.show_jump_locations
+    end
+
+    def try_set_new_waypoint(pos)
     end
   end
 end

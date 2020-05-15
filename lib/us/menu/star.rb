@@ -33,21 +33,22 @@ module Us
 
       def show(star)
         @star = star
-      end
-
-      def hide
-        @star = nil
-      end
-
-      def visible?
-        @star ? true : false
+        @star.selected = true
       end
 
       def clicked?(pos)
         @background.contains?(pos)
       end
 
+      def close_menu_and_rehandle_click(pos)
+        @star.selected = false
+        Us.game.close_menu
+        Us.game.handle_click(pos)
+      end
+
       def handle_click(pos)
+        close_menu_and_rehandle_click(pos) unless clicked?(pos)
+
         if @carrier_quad.contains?(pos)
           @star.build_carrier
         end
