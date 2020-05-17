@@ -6,7 +6,7 @@ module Us
           Point.new(0, 100), Point.new(WIDTH, 100),
           Point.new(0, HEIGHT), Point.new(WIDTH, HEIGHT)
         )
-        @star_name_pos = Point.new(@background.p1.x + 5, @background.p1.y + 10)
+        @title_pos = Point.new(@background.p1.x + 5, @background.p1.y + 10)
         @carrier_quad = Quad.new(
           Point.new(0, 140), Point.new(WIDTH, 140),
           Point.new(0, 190), Point.new(WIDTH, 190)
@@ -22,7 +22,7 @@ module Us
       end
 
       def draw_star_name
-        G.draw_text(text: @star.to_s, pos: @star_name_pos, z: 100, size: :small)
+        G.draw_text(text: @star.to_s, pos: @title_pos, z: 100, size: :small)
       end
 
       def draw_carrier_section
@@ -33,21 +33,22 @@ module Us
 
       def show(star)
         @star = star
-      end
-
-      def hide
-        @star = nil
-      end
-
-      def visible?
-        @star ? true : false
+        @star.selected = true
       end
 
       def clicked?(pos)
         @background.contains?(pos)
       end
 
+      def close_menu_and_rehandle_click(pos)
+        @star.selected = false
+        Us.game.close_menu
+        Us.game.handle_click(pos)
+      end
+
       def handle_click(pos)
+        close_menu_and_rehandle_click(pos) unless clicked?(pos)
+
         if @carrier_quad.contains?(pos)
           @star.build_carrier
         end

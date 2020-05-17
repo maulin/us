@@ -22,7 +22,7 @@ module Us
 
   def self.current_player
     id = @store.transaction(true) { @store.fetch('game.player_id', nil) }
-    @current_player = game.fetch_player(id: id)
+    @current_player = game.fetch_player(id)
   end
 
   def self.try_load_user

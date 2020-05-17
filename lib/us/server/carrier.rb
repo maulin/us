@@ -5,11 +5,12 @@ module Us
     class Carrier
       SIZE = 25
 
-      def initialize(star: self)
+      def initialize(star)
         @id = Us.gen_id
         @name = "USS - #{star.name}"
         @pos = star.pos
         @owner = star.owner
+        @start = star
       end
 
       def client_resp
@@ -20,7 +21,8 @@ module Us
           cx: @pos.x,
           cy: @pos.y,
           name: @name,
-          owner: @owner.id
+          owner: @owner.id,
+          start: @start.id
         }
       end
     end

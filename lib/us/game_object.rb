@@ -2,15 +2,16 @@ module Us
   class GameObject
     SIZE = 25
 
-    attr_reader :name, :pos, :owner
+    attr_reader :id, :name, :pos, :owner, :game, :center
     attr_accessor :selected
 
-    def initialize(data:, players:)
+    def initialize(data:, game:)
       @id = data['id']
       @name = data['name']
       @center = Point.new(data['cx'], data['cy'])
       @pos = Point.new(@center.x - SIZE, @center.y - SIZE)
-      @owner = players.find { |p| p.id == data['owner'] }
+      @owner = game.fetch_player(data['owner'])
+      @game = game
     end
 
     def clicked?(pos)

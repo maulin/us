@@ -29,7 +29,6 @@ module Us
         server.start
       end
 
-      puts pid
       Process.detach(pid)
     end
 

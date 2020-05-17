@@ -1,7 +1,7 @@
 module Us
   module Server
     class Clock
-      TICK_INTERVAL = 15
+      TICK_INTERVAL = 20
       CYCLE_TICKS = 4
 
       attr_reader :ticks, :tick_start_time

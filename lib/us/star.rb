@@ -1,12 +1,14 @@
 module Us
   class Star < GameObject
     SPRITE = Gosu::Image.new(File.expand_path('./assets/visible_star.png'))
+    WP_SPRITE = Gosu::Image.new(File.expand_path('./assets/waypoint.png'))
 
-    def initialize(data:, players:)
+    attr_accessor :mark_as_waypoint
+
+    def initialize(data)
       super
       @ships = data['ships']
       @bottom_middle = Point.new(@center.x, @center.y + SIZE + 5)
-      @show_rings = false
     end
 
     def build_carrier
@@ -14,7 +16,7 @@ module Us
       Us.update_game(params: { order: ['carrier', @id] })
     end
 
-    def draw_rings
+    def draw_hyperspace_ring
       r = owner.hyperspace_range
 
       0.step(360, 10) do |i|
@@ -25,8 +27,29 @@ module Us
       end
     end
 
+    def draw_waypoint_marker
+      WP_SPRITE.draw(pos.x, pos.y, 10)
+    end
+
+    def waypoint_locations
+      game.waypoint_locations_from(self)
+    end
+
+    def hide_waypoint_locations
+      self.selected = false
+      stars = waypoint_locations
+      stars.each { |s| s.mark_as_waypoint = false }
+    end
+
+    def show_waypoint_locations
+      self.selected = true
+      stars = waypoint_locations
+      stars.each { |s| s.mark_as_waypoint = true }
+    end
+
     def draw
-      draw_rings if selected
+      draw_hyperspace_ring if selected
+      draw_waypoint_marker if mark_as_waypoint
       owner.ring.draw(pos.x, pos.y, 10)
       SPRITE.draw(pos.x, pos.y, 10)
       G.draw_text(text: @ships, pos: @bottom_middle, z: 10, size: :tiny)
