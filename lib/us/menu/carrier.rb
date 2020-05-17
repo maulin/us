@@ -59,10 +59,6 @@ module Us
         set_waypoints_text_image
       end
 
-      def clicked?(pos)
-        @background.contains?(pos)
-      end
-
       def close_menu
         Us.game.close_menu
         @carrier.stop_waypointing
