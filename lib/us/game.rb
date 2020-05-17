@@ -79,42 +79,38 @@ module Us
     end
 
     def handle_click(pos)
-      puts "game handle click"
       if @hud.clicked?(pos)
-        puts "hud clicked"
         @hud.handle_click(pos)
       elsif @visible_menu
-        puts "visible menu handle click"
         @visible_menu.handle_click(pos)
       else
-        puts "finding objects"
         pos = G.untranslate_and_zoom(pos)
         objects = game_objects_at(pos)
-        puts objects
         return if objects.empty?
 
         if objects.count > 1
-          puts "showing objects menu"
           @visible_menu = MENUS[:objects]
           @visible_menu.show(objects)
         else
           object = objects.first
-          puts "showing single object menu"
           @visible_menu = MENUS[object.menu_type]
           @visible_menu.show(object)
         end
       end
     end
 
+    def fetch_star_at(pos)
+      @stars.find { |s| s.clicked?(pos) }
+    end
+
     def game_objects_at(pos)
       objects = []
-      @stars.each do |s|
-        objects << s if s.clicked?(pos)
-      end
+
+      objects << fetch_star_at(pos)
       @carriers.each do |c|
         objects << c if c.clicked?(pos)
       end
-      objects
+      objects.compact
     end
 
     def jump_locations_from(star)

@@ -31,9 +31,19 @@ module Us
       WP_SPRITE.draw(pos.x, pos.y, 10)
     end
 
+    def jump_locations
+      game.jump_locations_from(self)
+    end
+
+    def hide_jump_locations
+      self.selected = false
+      stars = jump_locations
+      stars.each { |s| s.mark_for_jump = false }
+    end
+
     def show_jump_locations
       self.selected = true
-      stars = game.jump_locations_from(self)
+      stars = jump_locations
       stars.each { |s| s.mark_for_jump = true }
     end
 

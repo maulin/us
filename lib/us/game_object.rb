@@ -2,7 +2,7 @@ module Us
   class GameObject
     SIZE = 25
 
-    attr_reader :id, :name, :pos, :owner, :game
+    attr_reader :id, :name, :pos, :owner, :game, :center
     attr_accessor :selected
 
     def initialize(data:, game:)

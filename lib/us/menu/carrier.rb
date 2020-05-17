@@ -15,6 +15,17 @@ module Us
           Point.new(WIDTH / 2 + 10, 140), Point.new(WIDTH, 140),
           Point.new(WIDTH / 2 + 10, 190), Point.new(WIDTH, 190)
         )
+        set_waypoints_text_image
+      end
+
+      def set_waypoints_text_image
+        text = @carrier ? @carrier.waypoints_text : ''
+
+        @waypoints_text_image = G.image_from_text(
+          text: text,
+          size: :small,
+          options: { width: WIDTH }
+        )
       end
 
       def draw
@@ -24,6 +35,7 @@ module Us
         G.draw_text(text: @carrier.to_s, pos: @title_pos, z: 100, size: :small)
         draw_edit_waypoint_quad
         draw_close_edit_quad
+        draw_waypoint_list
       end
 
       def draw_edit_waypoint_quad
@@ -38,6 +50,10 @@ module Us
         G.draw_text(text: 'Close', pos: text_pos, z: 100, size: :small)
       end
 
+      def draw_waypoint_list
+        @waypoints_text_image.draw(@edit_waypoint_quad.p3.x + 5, @edit_waypoint_quad.p3.y + 10, 100)
+      end
+
       def show(carrier)
         @carrier = carrier
       end
@@ -46,19 +62,20 @@ module Us
         @background.contains?(pos)
       end
 
-      def close_menu_and_rehandle_click(pos)
+      def close_menu
         Us.game.close_menu
-        Us.game.handle_click(pos)
+        @carrier.stop_waypointing
       end
 
       def handle_click(pos)
-        Us.game.close_menu if @close_edit.contains?(pos)
+        close_menu if @close_edit.contains?(pos)
 
+        set_waypoints_text_image
         if @edit_waypoint_quad.contains?(pos)
           @carrier.start_waypointing
-          @waypointing = true
-        elsif @waypointing
-          @carrier.try_set_new_waypoint
+        elsif @carrier.waypointing
+          @carrier.try_set_new_waypoint(pos)
+          set_waypoints_text_image
         end
       end
     end
