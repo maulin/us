@@ -1,15 +1,8 @@
-require_relative './star'
-require_relative './carrier'
-
 module Us
   module Menu
     class Objects
       ROW_HEIGHT = 50
       ROW_SPACE = 10
-      MENUS = {
-        star: Star.new,
-        carrier: Carrier.new
-      }
 
       def initialize
         @background = Quad.new(

@@ -56,6 +56,7 @@ module Us
 
       def show(carrier)
         @carrier = carrier
+        set_waypoints_text_image
       end
 
       def clicked?(pos)
@@ -70,7 +71,6 @@ module Us
       def handle_click(pos)
         close_menu if @close_edit.contains?(pos)
 
-        set_waypoints_text_image
         if @edit_waypoint_quad.contains?(pos)
           @carrier.start_waypointing
         elsif @carrier.waypointing

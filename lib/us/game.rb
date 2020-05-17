@@ -4,6 +4,8 @@ require_relative 'star'
 require_relative 'carrier'
 require_relative './menu/hud'
 require_relative './menu/objects'
+require_relative './menu/star'
+require_relative './menu/carrier'
 
 module Us
   class Game
@@ -93,8 +95,7 @@ module Us
           @visible_menu.show(objects)
         else
           object = objects.first
-          @visible_menu = MENUS[object.menu_type]
-          @visible_menu.show(object)
+          show_menu_for(object)
         end
       end
     end
@@ -113,7 +114,7 @@ module Us
       objects.compact
     end
 
-    def jump_locations_from(star)
+    def waypoint_locations_from(star)
       @stars.select do |s|
         magnitude = Vector.new(s.pos, star.pos).magnitude
         magnitude <= Us.current_player.hyperspace_range

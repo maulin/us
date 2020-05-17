@@ -3,7 +3,7 @@ module Us
     SPRITE = Gosu::Image.new(File.expand_path('./assets/visible_star.png'))
     WP_SPRITE = Gosu::Image.new(File.expand_path('./assets/waypoint.png'))
 
-    attr_accessor :mark_for_jump
+    attr_accessor :mark_as_waypoint
 
     def initialize(data)
       super
@@ -27,29 +27,29 @@ module Us
       end
     end
 
-    def draw_jump_marker
+    def draw_waypoint_marker
       WP_SPRITE.draw(pos.x, pos.y, 10)
     end
 
-    def jump_locations
-      game.jump_locations_from(self)
+    def waypoint_locations
+      game.waypoint_locations_from(self)
     end
 
-    def hide_jump_locations
+    def hide_waypoint_locations
       self.selected = false
-      stars = jump_locations
-      stars.each { |s| s.mark_for_jump = false }
+      stars = waypoint_locations
+      stars.each { |s| s.mark_as_waypoint = false }
     end
 
-    def show_jump_locations
+    def show_waypoint_locations
       self.selected = true
-      stars = jump_locations
-      stars.each { |s| s.mark_for_jump = true }
+      stars = waypoint_locations
+      stars.each { |s| s.mark_as_waypoint = true }
     end
 
     def draw
       draw_hyperspace_ring if selected
-      draw_jump_marker if mark_for_jump
+      draw_waypoint_marker if mark_as_waypoint
       owner.ring.draw(pos.x, pos.y, 10)
       SPRITE.draw(pos.x, pos.y, 10)
       G.draw_text(text: @ships, pos: @bottom_middle, z: 10, size: :tiny)
