@@ -46,8 +46,8 @@ module Us
         @stars.each(&:build_ships)
       end
 
-      def build_carrier(id:)
-        star = fetch_star(id: id)
+      def build_carrier(id)
+        star = fetch_star(id)
         return unless star.owner.can_afford?(cost: CARRIER_COST)
         carriers << Carrier.new(star)
         star.owner.deduct_credits(cost: CARRIER_COST)
@@ -55,10 +55,6 @@ module Us
 
       def game_full?
         @players.size == MAX_PLAYERS
-      end
-
-      def fetch_player(id:)
-        @players.find { |p| p.id == id }
       end
 
       def add_player(name:)
@@ -85,8 +81,16 @@ module Us
         @map.init_stars_for(player: player)
       end
 
-      def fetch_star(id:)
+      def fetch_player(id)
+        @players.find { |p| p.id == id }
+      end
+
+      def fetch_star(id)
         @stars.find { |s| s.id == id }
+      end
+
+      def fetch_carrier(id)
+        @carriers.find { |c| c.id == id }
       end
 
       def fetch_for(player_id:)
@@ -124,10 +128,14 @@ module Us
 
       def execute_order(order:)
         puts "GAME: Executing #{order}"
-        order, id = order
-        case order
+        type = order['order']
+        case type
         when 'carrier'
-          build_carrier(id: id)
+          star_id = order['id']
+          build_carrier(star_id)
+        when 'waypoints'
+          carrier = fetch_carrier(order['id'])
+          carrier.update_waypoints(order['waypoints'])
         end
       end
     end

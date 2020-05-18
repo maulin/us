@@ -13,7 +13,12 @@ module Us
 
     def build_carrier
       return unless owner.credits >= Server::Game::CARRIER_COST
-      Us.update_game(params: { order: ['carrier', @id] })
+      Us.update_game(params: {
+        order: {
+          order: 'carrier',
+          id: @id,
+        }
+      })
     end
 
     def draw_hyperspace_ring

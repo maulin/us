@@ -6,8 +6,31 @@ module Us
 
     def initialize(data:, game:)
       super
-      @start = game.fetch_star(data['start'])
-      @waypoints = [@start]
+      set_waypoints(data)
+    end
+
+    def set_waypoints(data)
+      @waypoints = []
+      current = game.fetch_star_at(center)
+      @waypoints << current if current
+
+      data['waypoints'].each do |id|
+        @waypoints << game.fetch_star(id)
+      end
+    end
+
+    def save_waypoints
+      Us.update_game(params: {
+        order: {
+          order: 'waypoints',
+          id: id,
+          waypoints: waypoints
+        }
+      })
+    end
+
+    def waypoints
+      @waypoints.map(&:id)
     end
 
     def draw
