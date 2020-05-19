@@ -31,6 +31,7 @@ module Us
             @clock.tick
             if @clock.tick_complete?
               puts "TICK COMPLETE"
+              # move_carriers
               build_ships_at_stars
               @clock.increment_tick
               if @clock.cycle_complete?
@@ -40,6 +41,10 @@ module Us
             end
           end
         end
+      end
+
+      def move_carriers
+        @carriers.each(&:move)
       end
 
       def build_ships_at_stars
@@ -127,15 +132,20 @@ module Us
       end
 
       def execute_order(order:)
-        puts "GAME: Executing #{order}"
-        type = order['order']
-        case type
-        when 'carrier'
-          star_id = order['id']
-          build_carrier(star_id)
-        when 'waypoints'
-          carrier = fetch_carrier(order['id'])
-          carrier.update_waypoints(order['waypoints'])
+        begin
+          puts "GAME: Executing #{order}"
+          type = order['order']
+          case type
+          when 'carrier'
+            star_id = order['id']
+            build_carrier(star_id)
+          when 'waypoints'
+            carrier = fetch_carrier(order['id'])
+            carrier.update_waypoints(order['waypoints'])
+          end
+        rescue => e
+          puts e.backtrace
+          raise e
         end
       end
     end
