@@ -26,20 +26,25 @@ module Us
       end
 
       def run
-        loop do
-          if @state == :started
-            @clock.tick
-            if @clock.tick_complete?
-              puts "TICK COMPLETE"
-              # move_carriers
-              build_ships_at_stars
-              @clock.increment_tick
-              if @clock.cycle_complete?
-                puts "GALACTIC CYCLE COMPLETE"
-                @clock.increment_cycle
+        begin
+          loop do
+            if @state == :started
+              @clock.tick
+              if @clock.tick_complete?
+                puts "TICK COMPLETE"
+                # move_carriers
+                build_ships_at_stars
+                @clock.increment_tick
+                if @clock.cycle_complete?
+                  puts "GALACTIC CYCLE COMPLETE"
+                  @clock.increment_cycle
+                end
               end
             end
           end
+        rescue => e
+          puts e.backtrace
+          raise e
         end
       end
 
@@ -132,20 +137,15 @@ module Us
       end
 
       def execute_order(order:)
-        begin
-          puts "GAME: Executing #{order}"
-          type = order['order']
-          case type
-          when 'carrier'
-            star_id = order['id']
-            build_carrier(star_id)
-          when 'waypoints'
-            carrier = fetch_carrier(order['id'])
-            carrier.update_waypoints(order['waypoints'])
-          end
-        rescue => e
-          puts e.backtrace
-          raise e
+        puts "GAME: Executing #{order}"
+        type = order['order']
+        case type
+        when 'carrier'
+          star_id = order['id']
+          build_carrier(star_id)
+        when 'waypoints'
+          carrier = fetch_carrier(order['id'])
+          carrier.update_waypoints(order['waypoints'])
         end
       end
     end
