@@ -9,6 +9,7 @@ module G
     :p_blue => Gosu::Color::BLUE,
     :p_orange => Gosu::Color.new(223,95,0),
     :white => Gosu::Color::WHITE,
+    :hyperspace => Gosu::Color.new(168, 0, 223)
   }
 
   FONT_SIZES = {

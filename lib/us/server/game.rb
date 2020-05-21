@@ -1,5 +1,6 @@
 require_relative './player'
 require_relative './map'
+require_relative './carrier'
 require_relative './clock'
 
 module Us
@@ -32,7 +33,7 @@ module Us
               @clock.tick
               if @clock.tick_complete?
                 puts "TICK COMPLETE"
-                # move_carriers
+                move_carriers
                 build_ships_at_stars
                 @clock.increment_tick
                 if @clock.cycle_complete?

@@ -5,7 +5,7 @@ module Us
 
     attr_accessor :mark_as_waypoint
 
-    def initialize(data)
+    def initialize(data:, game:)
       super
       @ships = data['ships']
       @bottom_middle = Point.new(@center.x, @center.y + SIZE + 5)
@@ -42,12 +42,14 @@ module Us
 
     def hide_waypoint_locations
       self.selected = false
+      self.mark_as_waypoint = false
       stars = waypoint_locations
       stars.each { |s| s.mark_as_waypoint = false }
     end
 
     def show_waypoint_locations
       self.selected = true
+      self.mark_as_waypoint = true
       stars = waypoint_locations
       stars.each { |s| s.mark_as_waypoint = true }
     end
@@ -57,7 +59,7 @@ module Us
       draw_waypoint_marker if mark_as_waypoint
       owner.ring.draw(pos.x, pos.y, 10)
       SPRITE.draw(pos.x, pos.y, 10)
-      G.draw_text(text: @ships, pos: @bottom_middle, z: 10, size: :tiny)
+      G.draw_text(text: @ships, pos: @bottom_middle, z: 100, size: :tiny)
     end
   end
 end

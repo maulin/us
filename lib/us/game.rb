@@ -34,6 +34,7 @@ module Us
     end
 
     def update_objects(data)
+      close_menu
       @state = data['state'].to_sym
 
       @ticks = data['clock']['ticks']
@@ -116,6 +117,7 @@ module Us
 
     def waypoint_locations_from(star)
       @stars.select do |s|
+        next if s == star
         magnitude = Vector.new(s.pos, star.pos).magnitude
         magnitude <= Us.current_player.hyperspace_range
       end
