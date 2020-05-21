@@ -5,7 +5,7 @@ module Us
 
     attr_accessor :mark_as_waypoint
 
-    def initialize(data)
+    def initialize(data:, game:)
       super
       @ships = data['ships']
       @bottom_middle = Point.new(@center.x, @center.y + SIZE + 5)
@@ -13,7 +13,12 @@ module Us
 
     def build_carrier
       return unless owner.credits >= Server::Game::CARRIER_COST
-      Us.update_game(params: { order: ['carrier', @id] })
+      Us.update_game(params: {
+        order: {
+          order: 'carrier',
+          id: @id,
+        }
+      })
     end
 
     def draw_hyperspace_ring
@@ -37,12 +42,14 @@ module Us
 
     def hide_waypoint_locations
       self.selected = false
+      self.mark_as_waypoint = false
       stars = waypoint_locations
       stars.each { |s| s.mark_as_waypoint = false }
     end
 
     def show_waypoint_locations
       self.selected = true
+      self.mark_as_waypoint = true
       stars = waypoint_locations
       stars.each { |s| s.mark_as_waypoint = true }
     end

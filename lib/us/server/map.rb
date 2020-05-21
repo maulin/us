@@ -1,6 +1,5 @@
 require_relative '../point'
 require_relative './star'
-require_relative './carrier'
 
 module Us
   module Server

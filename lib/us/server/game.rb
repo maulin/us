@@ -1,5 +1,6 @@
 require_relative './player'
 require_relative './map'
+require_relative './carrier'
 require_relative './clock'
 
 module Us
@@ -26,28 +27,38 @@ module Us
       end
 
       def run
-        loop do
-          if @state == :started
-            @clock.tick
-            if @clock.tick_complete?
-              puts "TICK COMPLETE"
-              build_ships_at_stars
-              @clock.increment_tick
-              if @clock.cycle_complete?
-                puts "GALACTIC CYCLE COMPLETE"
-                @clock.increment_cycle
+        begin
+          loop do
+            if @state == :started
+              @clock.tick
+              if @clock.tick_complete?
+                puts "TICK COMPLETE"
+                move_carriers
+                build_ships_at_stars
+                @clock.increment_tick
+                if @clock.cycle_complete?
+                  puts "GALACTIC CYCLE COMPLETE"
+                  @clock.increment_cycle
+                end
               end
             end
           end
+        rescue => e
+          puts e.backtrace
+          raise e
         end
+      end
+
+      def move_carriers
+        @carriers.each(&:move)
       end
 
       def build_ships_at_stars
         @stars.each(&:build_ships)
       end
 
-      def build_carrier(id:)
-        star = fetch_star(id: id)
+      def build_carrier(id)
+        star = fetch_star(id)
         return unless star.owner.can_afford?(cost: CARRIER_COST)
         carriers << Carrier.new(star)
         star.owner.deduct_credits(cost: CARRIER_COST)
@@ -55,10 +66,6 @@ module Us
 
       def game_full?
         @players.size == MAX_PLAYERS
-      end
-
-      def fetch_player(id:)
-        @players.find { |p| p.id == id }
       end
 
       def add_player(name:)
@@ -85,8 +92,16 @@ module Us
         @map.init_stars_for(player: player)
       end
 
-      def fetch_star(id:)
+      def fetch_player(id)
+        @players.find { |p| p.id == id }
+      end
+
+      def fetch_star(id)
         @stars.find { |s| s.id == id }
+      end
+
+      def fetch_carrier(id)
+        @carriers.find { |c| c.id == id }
       end
 
       def fetch_for(player_id:)
@@ -124,10 +139,14 @@ module Us
 
       def execute_order(order:)
         puts "GAME: Executing #{order}"
-        order, id = order
-        case order
+        type = order['order']
+        case type
         when 'carrier'
-          build_carrier(id: id)
+          star_id = order['id']
+          build_carrier(star_id)
+        when 'waypoints'
+          carrier = fetch_carrier(order['id'])
+          carrier.update_waypoints(order['waypoints'])
         end
       end
     end

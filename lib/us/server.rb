@@ -67,7 +67,7 @@ module Us
         params = JSON.parse(req.body)
         res['Content-Type'] = 'Application/Json'
 
-        player = game.fetch_player(id: params['id'])
+        player = game.fetch_player(params['id'])
         if !player
           player = game.add_player(name: params['name'])
         end

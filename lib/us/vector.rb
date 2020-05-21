@@ -1,5 +1,8 @@
 module Us
   class Vector
+
+    DEG = 360 / (2 * Math::PI)
+
     def initialize(p1, p2)
       x = p2.x - p1.x
       y = p2.y - p1.y
@@ -21,6 +24,10 @@ module Us
 
     def heading
       @heading ||= Point.new(@vec.x / magnitude, @vec.y / magnitude)
+    end
+
+    def rotation_angle
+      (Math.atan2(@vec.y, @vec.x) * DEG) + 90.0
     end
   end
 end

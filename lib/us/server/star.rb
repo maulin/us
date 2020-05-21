@@ -1,6 +1,7 @@
 module Us
   module Server
     class Star
+      SIZE = 25
       CHARS = ('A'..'Z').to_a
 
       attr_reader :id, :pos, :name, :owner
@@ -47,6 +48,11 @@ module Us
           name: name,
           owner: @owner.id
         }
+      end
+
+      def contains?(pos)
+        vec = Vector.new(@pos, pos)
+        vec.magnitude < SIZE ? true : false
       end
     end
   end
