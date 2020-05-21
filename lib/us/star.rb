@@ -59,7 +59,7 @@ module Us
       draw_waypoint_marker if mark_as_waypoint
       owner.ring.draw(pos.x, pos.y, 10)
       SPRITE.draw(pos.x, pos.y, 10)
-      G.draw_text(text: @ships, pos: @bottom_middle, z: 100, size: :tiny)
+      G.draw_text(text: @ships, pos: @bottom_middle, z: 10, size: :tiny)
     end
   end
 end

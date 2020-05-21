@@ -44,11 +44,11 @@ module Us
       end
 
       draw_waypoints
-      draw_hyperspace if @dest
+      draw_hyperspace
     end
 
-    def draw_hyperspace
-      G.draw_line(p1: center, p2: @dest.center, z: 10, color: :hyperspace)
+    def current_waypoint
+      @waypoints.last || @dest || game.fetch_star_at(center)
     end
 
     def draw_waypoints
@@ -68,8 +68,10 @@ module Us
       end
     end
 
-    def current_waypoint
-      @waypoints.last || @dest || game.fetch_star_at(center)
+    def draw_hyperspace
+      return unless @dest
+
+      G.draw_line(p1: center, p2: @dest.center, z: 10, color: :hyperspace)
     end
 
     def start_waypointing
