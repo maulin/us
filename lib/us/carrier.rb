@@ -2,7 +2,7 @@ module Us
   class Carrier < GameObject
     SPRITE = Gosu::Image.new(File.expand_path('./assets/carrier.png'))
 
-    attr_reader :start, :waypointing
+    attr_reader :start, :waypointing, :waypoints
 
     def initialize(data:, game:)
       super
@@ -25,6 +25,11 @@ module Us
       data['waypoints'].each do |id|
         @waypoints << game.fetch_star(id)
       end
+    end
+
+    def reset_waypoints
+      @waypoints = []
+      save_waypoints
     end
 
     def save_waypoints

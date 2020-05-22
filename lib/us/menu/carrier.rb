@@ -6,68 +6,76 @@ module Us
           Point.new(0, 100), Point.new(WIDTH, 100),
           Point.new(0, HEIGHT), Point.new(WIDTH, HEIGHT)
         )
-        @title_pos = Point.new(@background.p1.x + 5, @background.p1.y + 10)
+        @title_pos = Point.new(@background.p1.x + 5, 130)
+        @close_menu_quad = Quad.new(
+          Point.new(WIDTH * 0.90 + 10, 120), Point.new(WIDTH, 120),
+          Point.new(WIDTH * 0.90 + 10, 170), Point.new(WIDTH, 170)
+        )
+        @close_menu_text_pos = Point.new(@close_menu_quad.p1.x + 5, @close_menu_quad.p1.y + 5)
+
         @edit_waypoint_quad = Quad.new(
-          Point.new(0, 140), Point.new(WIDTH * 0.40, 140),
-          Point.new(0, 190), Point.new(WIDTH * 0.40, 190)
+          Point.new(0, 190), Point.new(WIDTH * 0.3, 190),
+          Point.new(0, 240), Point.new(WIDTH * 0.3, 240)
         )
-        @save_quad = Quad.new(
-          Point.new(WIDTH * 0.40 + 10, 140), Point.new(WIDTH * 0.80, 140),
-          Point.new(WIDTH * 0.40 + 10, 190), Point.new(WIDTH * 0.80, 190)
-        )
-        @close_quad = Quad.new(
-          Point.new(WIDTH * 0.80 + 10, 140), Point.new(WIDTH, 140),
-          Point.new(WIDTH * 0.80 + 10, 190), Point.new(WIDTH, 190)
-        )
-        set_waypoints_text_image
-      end
+        @edit_waypoint_text_pos = Point.new(@edit_waypoint_quad.p1.x + 5, @edit_waypoint_quad.p1.y + 10)
 
-      def set_waypoints_text_image
-        text = @carrier ? @carrier.waypoints_text : ''
-
-        @waypoints_text_image = G.image_from_text(
-          text: text,
-          size: :small,
-          options: { width: WIDTH }
+        @save_waypoint_quad = Quad.new(
+          Point.new(WIDTH * 0.3 + 10, 190), Point.new(WIDTH * 0.6, 190),
+          Point.new(WIDTH * 0.3 + 10, 240), Point.new(WIDTH * 0.6, 240)
         )
+        @save_waypoint_text_pos = Point.new(@save_waypoint_quad.p1.x + 5, @save_waypoint_quad.p1.y + 10)
+
+        @reset_waypoint_quad = Quad.new(
+          Point.new(WIDTH * 0.6 + 10, 190), Point.new(WIDTH, 190),
+          Point.new(WIDTH * 0.6 + 10, 240), Point.new(WIDTH, 240)
+        )
+        @reset_waypoint_text_pos = Point.new(@reset_waypoint_quad.p1.x + 5, @reset_waypoint_quad.p1.y + 10)
+        @waypoint_list_text_pos = Point.new(@background.p1.x + 5, 260)
       end
 
       def draw
         return unless @carrier
 
         G.draw_quad(quad: @background, color: :blue_dark, z: 100)
-        G.draw_text(text: @carrier.to_s, pos: @title_pos, z: 100, size: :small)
+        G.draw_text(text: @carrier.to_s, pos: @title_pos, z: 100, size: :medium)
+        draw_close_menu_quad
         draw_edit_waypoint_quad
         draw_save_quad
-        draw_close_quad
+        draw_reset_quad
         draw_waypoint_list
+      end
+
+      def draw_close_menu_quad
+        G.draw_quad(quad: @close_menu_quad, color: :blue_middle, z: 100)
+        G.draw_text(text: 'X', pos: @close_menu_text_pos, z: 100, size: :medium)
       end
 
       def draw_edit_waypoint_quad
         G.draw_quad(quad: @edit_waypoint_quad, color: :blue_middle, z: 100)
-        text_pos = Point.new(@edit_waypoint_quad.p1.x + 5, @edit_waypoint_quad.p1.y + 10)
-        G.draw_text(text: 'Edit waypoints', pos: text_pos, z: 100, size: :small)
+        G.draw_text(text: 'Edit', pos: @edit_waypoint_text_pos, z: 100, size: :small)
       end
 
       def draw_save_quad
-        G.draw_quad(quad: @save_quad, color: :blue_middle, z: 100)
-        text_pos = Point.new(@save_quad.p1.x + 5, @save_quad.p1.y + 10)
-        G.draw_text(text: 'Save', pos: text_pos, z: 100, size: :small)
+        G.draw_quad(quad: @save_waypoint_quad, color: :blue_middle, z: 100)
+        G.draw_text(text: 'Save', pos: @save_waypoint_text_pos, z: 100, size: :small)
       end
 
-      def draw_close_quad
-        G.draw_quad(quad: @close_quad, color: :blue_middle, z: 100)
-        text_pos = Point.new(@close_quad.p1.x + 5, @close_quad.p1.y + 10)
-        G.draw_text(text: 'X', pos: text_pos, z: 100, size: :small)
+      def draw_reset_quad
+        G.draw_quad(quad: @reset_waypoint_quad, color: :blue_middle, z: 100)
+        G.draw_text(text: 'Reset', pos: @reset_waypoint_text_pos, z: 100, size: :small)
       end
 
       def draw_waypoint_list
-        @waypoints_text_image.draw(@edit_waypoint_quad.p3.x + 5, @edit_waypoint_quad.p3.y + 10, 100)
+        G.draw_text(text: 'Waypoint orders', pos: @waypoint_list_text_pos, z: 100, size: :medium)
+
+        @carrier.waypoints.each_with_index do |w, i|
+          text_pos = Point.new(@background.p1.x + 5, 320 + i * 40)
+          G.draw_text(text: w.name, pos: text_pos, z: 100, size: :small)
+        end
       end
 
       def show(carrier)
         @carrier = carrier
-        set_waypoints_text_image
       end
 
       def close_menu
@@ -80,15 +88,16 @@ module Us
       end
 
       def handle_click(pos)
-        close_menu if @close_quad.contains?(pos)
+        close_menu if @close_menu_quad.contains?(pos)
 
         if @edit_waypoint_quad.contains?(pos)
           @carrier.start_waypointing
-        elsif @save_quad.contains?(pos)
+        elsif @save_waypoint_quad.contains?(pos)
           save_waypoints
+        elsif @reset_waypoint_quad.contains?(pos)
+          @carrier.reset_waypoints
         elsif @carrier.waypointing
           @carrier.try_set_new_waypoint(pos)
-          set_waypoints_text_image
         end
       end
     end
