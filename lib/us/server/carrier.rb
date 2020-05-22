@@ -13,6 +13,7 @@ module Us
         @pos = star.pos.dup
         @owner = star.owner
         @waypoints = []
+        @ships = 0.0
       end
 
       def move
@@ -25,10 +26,22 @@ module Us
           if @dest.contains?(pos)
             puts "CARRIER: Reached destination - #{@dest}"
             @pos = @dest.pos.dup
-            @dest = nil
             @dest_vec = nil
+            do_ship_transfer
+            @dest = nil
           end
         end
+      end
+
+      def do_ship_transfer
+        add = @dest.take_ships
+        @ships += add
+        puts @ships
+        puts @add
+      end
+
+      def ships
+        @ships.floor
       end
 
       def set_new_destination
@@ -55,7 +68,8 @@ module Us
           name: @name,
           owner: @owner.id,
           waypoints: @waypoints.map(&:id),
-          dest: @dest&.id
+          dest: @dest&.id,
+          ships: ships
         }
       end
     end

@@ -7,8 +7,10 @@ module Us
     def initialize(data:, game:)
       super
       set_waypoints(data)
+      @ships = data['ships']
       @dest = game.fetch_star(data['dest'])
       @angle = get_angle
+      @bottom_middle = Point.new(@center.x, @center.y + SIZE + 5)
     end
 
     def get_angle
@@ -44,6 +46,7 @@ module Us
 
     def draw
       owner.ring.draw(pos.x, pos.y, 20)
+      G.draw_text(text: @ships, pos: @bottom_middle, z: 10, size: :tiny)
       Gosu.rotate(@angle, center.x, center.y) do
         SPRITE.draw(pos.x, pos.y, 30)
       end
