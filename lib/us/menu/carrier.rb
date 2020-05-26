@@ -31,6 +31,11 @@ module Us
         )
         @reset_waypoint_text_pos = Point.new(@reset_waypoint_quad.p1.x + 5, @reset_waypoint_quad.p1.y + 10)
         @waypoint_list_text_pos = Point.new(@background.p1.x + 5, 260)
+
+        puts "*" * 80
+        puts G.window
+        G.window.text_input = Gosu::TextInput.new
+        @order_quads = []
       end
 
       def draw
@@ -67,10 +72,25 @@ module Us
 
       def draw_waypoint_list
         G.draw_text(text: 'Waypoint orders', pos: @waypoint_list_text_pos, z: 100, size: :medium)
+        @order_quads = []
 
         @carrier.waypoints.each_with_index do |w, i|
-          text_pos = Point.new(@background.p1.x + 5, 320 + i * 40)
-          G.draw_text(text: w.name, pos: text_pos, z: 100, size: :small)
+          y_pos = 320 + i * 60
+          q = Quad.new(
+            Point.new(@background.p1.x + 20, y_pos + 20),
+            Point.new(@background.p1.x + 480, y_pos + 20),
+            Point.new(@background.p1.x + 20, y_pos + 60),
+            Point.new(@background.p1.x + 480, y_pos + 60),
+          )
+          @order_quads << q
+
+          star, order = w
+          G.draw_quad(quad: q, color: :blue_middle, z: 100)
+          text_pos = Point.new(q.p1.x + 5, q.p1.y + 5)
+          G.draw_text(text: star.name, pos: text_pos, z: 100, size: :small)
+
+          order_pos = Point.new(q.p1.x + 300, q.p1.y + 5)
+          G.draw_text(text: order, pos: order_pos, z: 100, size: :small)
         end
       end
 
@@ -87,6 +107,19 @@ module Us
         @carrier.save_waypoints
       end
 
+      def order_quad_clicked?(pos)
+        i = @order_quads.index { |q| q.contains?(pos) }
+        return unless i
+
+        quad = @order_quads[i]
+        order = @carrier.waypoints[i].last
+        G.window.text_input.text = order
+        # offset = G.window.text_input.text.size * 5
+        # # def self.draw_text(text:, pos:, z:, size:, color: :white)
+        # order_pos = Point.new(quad.p1.x + 300, quad.p1.y + 5)
+        # G.draw_text(text: G.window.text_input.text, pos: order_pos, z: 100, size: :small, color: :white)
+      end
+
       def handle_click(pos)
         close_menu if @close_menu_quad.contains?(pos)
 
@@ -98,6 +131,7 @@ module Us
           @carrier.reset_waypoints
         elsif @carrier.waypointing
           @carrier.try_set_new_waypoint(pos)
+        else order_quad_clicked?(pos)
         end
       end
     end

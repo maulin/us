@@ -9,14 +9,14 @@ require_relative './menu/carrier'
 
 module Us
   class Game
-    MENUS = {
-      star: Menu::Star.new,
-      carrier: Menu::Carrier.new,
-      objects: Menu::Objects.new
-    }
     attr_accessor :players
 
     def initialize(data:)
+      @menus = {
+        star: Menu::Star.new,
+        carrier: Menu::Carrier.new,
+        objects: Menu::Objects.new
+      }
       @img_star = Gosu::Image.new(File.expand_path('./assets/visible_star.png'))
       @hud = Menu::Hud.new(self)
       @ticks = -1
@@ -77,7 +77,7 @@ module Us
     end
 
     def show_menu_for(object)
-      @visible_menu = MENUS[object.menu_type]
+      @visible_menu = @menus[object.menu_type]
       @visible_menu.show(object)
     end
 
@@ -92,7 +92,7 @@ module Us
         return if objects.empty?
 
         if objects.count > 1
-          @visible_menu = MENUS[:objects]
+          @visible_menu = @menus[:objects]
           @visible_menu.show(objects)
         else
           object = objects.first

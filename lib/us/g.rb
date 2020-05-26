@@ -40,6 +40,11 @@ module G
     end
   end
 
+  def self.draw_rect(x:, y:, w:, h:, color:, z:)
+    color = COLORS[color]
+    window.draw_rect(x, y, w, h, color, z)
+  end
+
   def self.draw_quad(quad:, color:, z: 0)
     color = COLORS[color]
     window.draw_quad(
