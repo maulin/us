@@ -1,5 +1,11 @@
 module Us
   module Menu
+    class TextField < Gosu::TextInput
+      def filter(text)
+        text.gsub(/\D*/, '')
+      end
+    end
+
     class Carrier
       def initialize
         @background = Quad.new(
@@ -32,9 +38,7 @@ module Us
         @reset_waypoint_text_pos = Point.new(@reset_waypoint_quad.p1.x + 5, @reset_waypoint_quad.p1.y + 10)
         @waypoint_list_text_pos = Point.new(@background.p1.x + 5, 260)
 
-        puts "*" * 80
-        puts G.window
-        G.window.text_input = Gosu::TextInput.new
+        G.window.text_input = TextField.new
         @order_quads = []
       end
 
@@ -89,6 +93,9 @@ module Us
           text_pos = Point.new(q.p1.x + 5, q.p1.y + 5)
           G.draw_text(text: star.name, pos: text_pos, z: 100, size: :small)
 
+          if @selected_order_index == i
+            order = G.window.text_input.text
+          end
           order_pos = Point.new(q.p1.x + 300, q.p1.y + 5)
           G.draw_text(text: order, pos: order_pos, z: 100, size: :small)
         end
@@ -108,16 +115,19 @@ module Us
       end
 
       def order_quad_clicked?(pos)
-        i = @order_quads.index { |q| q.contains?(pos) }
-        return unless i
+        @order_quads.index { |q| q.contains?(pos) }
+      end
 
-        quad = @order_quads[i]
-        order = @carrier.waypoints[i].last
-        G.window.text_input.text = order
-        # offset = G.window.text_input.text.size * 5
-        # # def self.draw_text(text:, pos:, z:, size:, color: :white)
-        # order_pos = Point.new(quad.p1.x + 300, quad.p1.y + 5)
-        # G.draw_text(text: G.window.text_input.text, pos: order_pos, z: 100, size: :small, color: :white)
+      def set_text_input(pos)
+        i = @order_quads.index { |q| q.contains?(pos) }
+
+        if @selected_order_index
+          pp @carrier.waypoints[@selected_order_index]
+          @carrier.waypoints[@selected_order_index][1] = G.window.text_input.text
+        end
+
+        @selected_order_index = i
+        G.window.text_input.text = @carrier.waypoints[@selected_order_index].last
       end
 
       def handle_click(pos)
@@ -132,6 +142,7 @@ module Us
         elsif @carrier.waypointing
           @carrier.try_set_new_waypoint(pos)
         else order_quad_clicked?(pos)
+          set_text_input(pos)
         end
       end
     end
