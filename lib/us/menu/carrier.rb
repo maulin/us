@@ -1,11 +1,5 @@
 module Us
   module Menu
-    class TextField < Gosu::TextInput
-      def filter(text)
-        text.gsub(/\D*/, '')
-      end
-    end
-
     class Carrier
       def initialize
         @background = Quad.new(
@@ -38,7 +32,7 @@ module Us
         @reset_waypoint_text_pos = Point.new(@reset_waypoint_quad.p1.x + 5, @reset_waypoint_quad.p1.y + 10)
         @waypoint_list_text_pos = Point.new(@background.p1.x + 5, 260)
 
-        G.window.text_input = TextField.new
+        G.window.text_input = Gosu::TextInput.new
         @order_quads = []
       end
 
@@ -89,13 +83,15 @@ module Us
           @order_quads << q
 
           star, order = w
-          G.draw_quad(quad: q, color: :blue_middle, z: 100)
+          if @selected_order_index == i
+            order = G.window.text_input.text
+            G.draw_quad(quad: q, color: :black, z: 100)
+          else
+            G.draw_quad(quad: q, color: :blue_middle, z: 100)
+          end
           text_pos = Point.new(q.p1.x + 5, q.p1.y + 5)
           G.draw_text(text: star.name, pos: text_pos, z: 100, size: :small)
 
-          if @selected_order_index == i
-            order = G.window.text_input.text
-          end
           order_pos = Point.new(q.p1.x + 300, q.p1.y + 5)
           G.draw_text(text: order, pos: order_pos, z: 100, size: :small)
         end
@@ -103,6 +99,8 @@ module Us
 
       def show(carrier)
         @carrier = carrier
+        @selected_order_index = nil
+        G.window.text_input.text = nil
       end
 
       def close_menu
@@ -121,17 +119,17 @@ module Us
       def set_text_input(pos)
         i = @order_quads.index { |q| q.contains?(pos) }
 
-        if @selected_order_index
-          pp @carrier.waypoints[@selected_order_index]
-          @carrier.waypoints[@selected_order_index][1] = G.window.text_input.text
-        end
-
         @selected_order_index = i
         G.window.text_input.text = @carrier.waypoints[@selected_order_index].last
       end
 
       def handle_click(pos)
         close_menu if @close_menu_quad.contains?(pos)
+
+        if @selected_order_index
+          @carrier.waypoints[@selected_order_index][1] = G.window.text_input.text
+        end
+        @selected_order_index = nil
 
         if @edit_waypoint_quad.contains?(pos)
           @carrier.start_waypointing
@@ -141,7 +139,7 @@ module Us
           @carrier.reset_waypoints
         elsif @carrier.waypointing
           @carrier.try_set_new_waypoint(pos)
-        else order_quad_clicked?(pos)
+        elsif order_quad_clicked?(pos)
           set_text_input(pos)
         end
       end

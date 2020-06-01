@@ -36,8 +36,6 @@ module Us
       def do_ship_transfer
         add = @dest.take_ships
         @ships += add
-        puts @ships
-        puts @add
       end
 
       def ships
