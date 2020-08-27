@@ -7,7 +7,7 @@ module Us
   class GameWindow < Gosu::Window
     def initialize
       super(WIDTH, HEIGHT)
-      self.caption = "Uranus's Shame"
+      self.caption = "Game Window"
       @user_menu = Us::Menu::User.new(self)
       @game_menu = Us::Menu::Game.new
     end
