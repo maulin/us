@@ -26,6 +26,12 @@ module Us
         @ships.floor
       end
 
+      def take_ships
+        ships_to_take = ships
+        @ships -= ships_to_take
+        ships_to_take
+      end
+
       def to_s
         "STAR: #{id} #{name}, POS: #{pos}"
       end

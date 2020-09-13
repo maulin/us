@@ -30,11 +30,11 @@ module Us
       end
 
       def draw_input
-        G.window.draw_rect(1030, 650, 500, 100, Gosu::Color::GRAY, 20)
+        G.draw_rect(x: 1030, y: 650, w: 500, h: 100, color: :gray, z: 20)
         offset = G.window.text_input.text.size * 23
         @font.draw_text('Enter your name', 1030, 600, 30)
         @font.draw_text(G.window.text_input.text, 1030, 680, 30)
-        G.window.draw_rect(1030 + offset, 650, 10, 100, Gosu::Color::WHITE, 30)
+        G.draw_rect(x: 1030 + offset, y: 650, w: 10, h: 100, color: :white, z: 30)
       end
 
       def draw_background

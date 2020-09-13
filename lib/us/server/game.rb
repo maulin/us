@@ -10,7 +10,7 @@ module Us
       START_CREDITS = 500
       START_STARS_MAX_DISTANCE = Map::LY * 6
       CARRIER_COST = 25
-      MAX_PLAYERS = 1
+      MAX_PLAYERS = 2
 
       attr_accessor :stars, :carriers
 

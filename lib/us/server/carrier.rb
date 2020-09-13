@@ -13,6 +13,7 @@ module Us
         @pos = star.pos.dup
         @owner = star.owner
         @waypoints = []
+        @ships = 0.0
       end
 
       def move
@@ -25,16 +26,26 @@ module Us
           if @dest.contains?(pos)
             puts "CARRIER: Reached destination - #{@dest}"
             @pos = @dest.pos.dup
-            @dest = nil
             @dest_vec = nil
+            do_ship_transfer
+            @dest = nil
           end
         end
+      end
+
+      def do_ship_transfer
+        add = @dest.take_ships
+        @ships += add
+      end
+
+      def ships
+        @ships.floor
       end
 
       def set_new_destination
         return if @waypoints.empty?
 
-        @dest = @waypoints.shift
+        @dest, @order = @waypoints.shift
         puts "CARRIER: Traveling to #{@dest}"
         @dest_vec = Vector.new(pos, @dest.pos)
         move
@@ -42,8 +53,8 @@ module Us
 
       def update_waypoints(waypoints)
         @waypoints = []
-        waypoints.each do |id|
-          @waypoints << Server.game.fetch_star(id)
+        waypoints.each do |w|
+          @waypoints << [Server.game.fetch_star(w.first), w.last]
         end
       end
 
@@ -54,8 +65,9 @@ module Us
           cy: @pos.y,
           name: @name,
           owner: @owner.id,
-          waypoints: @waypoints.map(&:id),
-          dest: @dest&.id
+          waypoints: @waypoints.map { |w| [w.first.id, w.last] },
+          dest: @dest&.id,
+          ships: ships
         }
       end
     end

@@ -2,14 +2,15 @@ require_relative './vector'
 
 module G
   COLORS = {
+    :black => Gosu::Color::BLACK,
     :blue_dark => Gosu::Color.new(26,28,68),
-    :blue_middle => Gosu::Color.new(44,50,115),
     :blue_light => Gosu::Color.new(89,97,187),
+    :blue_middle => Gosu::Color.new(44,50,115),
     :gray => Gosu::Color::GRAY,
+    :hyperspace => Gosu::Color.new(168, 0, 223),
     :p_blue => Gosu::Color::BLUE,
     :p_orange => Gosu::Color.new(223,95,0),
-    :white => Gosu::Color::WHITE,
-    :hyperspace => Gosu::Color.new(168, 0, 223)
+    :white => Gosu::Color::WHITE
   }
 
   FONT_SIZES = {
@@ -38,6 +39,11 @@ module G
         yield
       end
     end
+  end
+
+  def self.draw_rect(x:, y:, w:, h:, color:, z:)
+    color = COLORS[color]
+    window.draw_rect(x, y, w, h, color, z)
   end
 
   def self.draw_quad(quad:, color:, z: 0)
