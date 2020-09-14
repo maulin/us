@@ -53,6 +53,33 @@ module Us
         @carriers.each(&:move)
       end
 
+      def perform_combat(carrier:, star:)
+        defender = star.owner
+        agressor = carrier.owner
+        star.change_owner(agressor)
+
+        # defender_turns = (star.completed_ships / agressor.weapons).ceil
+        # agressor_turns = (carrier.ships / (defender.weapons + 1)).ceil
+
+        # if defender_turns >= agressor_turns
+          # # defender win
+          # destroy_carrier(carrier)
+          # remaining_turns = (defender_turns - agressor_turns) + 1
+          # kia_ships = star.ships - remaining_turns * agressor.weapons
+          # star.take_damage(kia_ships)
+        # else
+          # # agressor win
+          # star.change_owner(agressor)
+          # remaining_turns = agressor_turns - defender_turns
+          # kia_ships = carrier.ships - remaining_turns * defender.weapons
+          # carrier.take_damage(kia_ships)
+        # end
+      end
+
+      def destroy_carrier(carrier)
+        @carriers.delete(carrier)
+      end
+
       def build_ships_at_stars
         @stars.each(&:build_ships)
       end
@@ -148,6 +175,10 @@ module Us
           carrier = fetch_carrier(order['id'])
           carrier.update_waypoints(order['waypoints'])
         end
+      end
+
+      def same_team?(obj_1, obj_2)
+        obj_1.owner == obj_2.owner
       end
     end
   end
