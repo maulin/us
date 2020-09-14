@@ -57,20 +57,21 @@ module Us
         defender = star.owner
         agressor = carrier.owner
 
-        while star.has_ships? do
-          # defender attacks first and gets a weapons bonus
-          carrier.take_damage(defender.weapons + 1)
-          if carrier.has_ships?
-            star.take_damage(agressor.weapons)
-          else
-            destroy_carrier(carrier)
-            break
-          end
+        defender_turns = (carrier.ships / agressor.weapons).ceil
+        agressor_turns = (star.completed_ships / (defender.weapons + 1)).ceil
 
-          if !star.has_ships?
-            # star.plunder!(agressor)
-            star.change_owner(agressor)
-          end
+        if defender_turns >= agressor_turns
+          # defender win
+          destroy_carrier(carrier)
+          remaining_turns = (defender_turns - agressor_turns) + 1
+          kia_ships = star.ships - remaining_turns * agressor.weapons
+          star.take_damage(kia_ships)
+        else
+          # agressor win
+          star.change_owner(agressor)
+          remaining_turns = agressor_turns - defender_turns
+          kia_ships = carrier.ships - remaining_turns * defender.weapons
+          carrier.take_damage(kia_ships)
         end
       end
 

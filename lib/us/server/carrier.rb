@@ -5,7 +5,7 @@ module Us
     class Carrier
       SPEED = Map::LY / 3
 
-      attr_reader :id, :pos, :owner
+      attr_reader :id, :pos, :owner, :ships
 
       def initialize(star)
         @id = Us.gen_id
@@ -46,12 +46,8 @@ module Us
         @ships += add
       end
 
-      def fight
+      def fight!
         Server.game.perform_combat(carrier: self, star: @dest)
-      end
-
-      def has_ships?
-        @ships > 0
       end
 
       def take_damage(damage)
@@ -83,7 +79,7 @@ module Us
           owner: @owner.id,
           waypoints: @waypoints.map { |w| [w.first.id, w.last] },
           dest: @dest&.id,
-          ships: @ships
+          ships: ships
         }
       end
     end

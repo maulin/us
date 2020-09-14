@@ -26,21 +26,12 @@ module Us
         @ships += new_ships
       end
 
-      def has_ships?
-        completed_ships > 0
-      end
-
       def completed_ships
         @ships.floor
       end
 
       def take_damage(damage)
         @ships -= damage
-        if damage >= @ships
-          @ships -= (@ships - @ships.to_i)
-        else
-          @ships -= damage
-        end
       end
 
       def take_ships
