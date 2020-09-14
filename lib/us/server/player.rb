@@ -12,7 +12,8 @@ module Us
         @color = color
         @researching = 'weapons'
         @manufacturing = 1
-        @hyperspace = 1
+        @hyperspace = 3
+        @weapons = 1
         puts "GAME: #{self} created"
       end
 

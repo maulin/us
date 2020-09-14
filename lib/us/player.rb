@@ -10,6 +10,7 @@ module Us
       @credits = data['credits']
       @manufacturing = data['manufacturing']
       @hyperspace = data['hyperspace']
+      @weapons = data['weapons']
     end
 
     def hyperspace_range

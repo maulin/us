@@ -16,18 +16,35 @@ module Us
         puts "GAME: #{self} created"
       end
 
+      def change_owner(owner)
+        @owner
+      end
+
       def build_ships
         return if @industry == 0
         new_ships = ((@industry * (@owner.manufacturing + 5)) / Clock::CYCLE_TICKS.to_f).round(2)
         @ships += new_ships
       end
 
-      def ships
+      def has_ships?
+        completed_ships > 0
+      end
+
+      def completed_ships
         @ships.floor
       end
 
+      def take_damage(damage)
+        @ships -= damage
+        if damage >= @ships
+          @ships -= (@ships - @ships.to_i)
+        else
+          @ships -= damage
+        end
+      end
+
       def take_ships
-        ships_to_take = ships
+        ships_to_take = completed_ships
         @ships -= ships_to_take
         ships_to_take
       end
@@ -42,7 +59,7 @@ module Us
 
       def full_resp
         basic_resp.merge({
-          ships: ships
+          ships: completed_ships
         })
       end
 
