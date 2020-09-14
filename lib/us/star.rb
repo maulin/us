@@ -23,7 +23,6 @@ module Us
 
     def draw_hyperspace_ring
       r = owner.hyperspace_range
-      puts "HYPER: #{r}"
 
       0.step(360, 10) do |i|
         p1 = Point.new(@center.x + Gosu.offset_x(i, r), @center.y + Gosu.offset_y(i, r))

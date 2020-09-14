@@ -56,23 +56,24 @@ module Us
       def perform_combat(carrier:, star:)
         defender = star.owner
         agressor = carrier.owner
+        star.change_owner(agressor)
 
-        defender_turns = (carrier.ships / agressor.weapons).ceil
-        agressor_turns = (star.completed_ships / (defender.weapons + 1)).ceil
+        # defender_turns = (star.completed_ships / agressor.weapons).ceil
+        # agressor_turns = (carrier.ships / (defender.weapons + 1)).ceil
 
-        if defender_turns >= agressor_turns
-          # defender win
-          destroy_carrier(carrier)
-          remaining_turns = (defender_turns - agressor_turns) + 1
-          kia_ships = star.ships - remaining_turns * agressor.weapons
-          star.take_damage(kia_ships)
-        else
-          # agressor win
-          star.change_owner(agressor)
-          remaining_turns = agressor_turns - defender_turns
-          kia_ships = carrier.ships - remaining_turns * defender.weapons
-          carrier.take_damage(kia_ships)
-        end
+        # if defender_turns >= agressor_turns
+          # # defender win
+          # destroy_carrier(carrier)
+          # remaining_turns = (defender_turns - agressor_turns) + 1
+          # kia_ships = star.ships - remaining_turns * agressor.weapons
+          # star.take_damage(kia_ships)
+        # else
+          # # agressor win
+          # star.change_owner(agressor)
+          # remaining_turns = agressor_turns - defender_turns
+          # kia_ships = carrier.ships - remaining_turns * defender.weapons
+          # carrier.take_damage(kia_ships)
+        # end
       end
 
       def destroy_carrier(carrier)
